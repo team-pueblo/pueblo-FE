@@ -6,6 +6,8 @@ import { theme } from "./theme/theme";
 import App from "./App";
 import MainPage from "./pages/Main/MainPage";
 import CategoryPage from "./pages/Main/CategoryPage";
+import BrandsPage from "./pages/brands/BrandsPage";
+import BrandProductsPage from "./pages/brands/BrandProductsPage";
 import EmptyPage from "./pages/Main/EmptyPage";
 import LoginPage from "./pages/login/LoginPage";
 import FindIdPage from "./pages/login/FindIdPage";
@@ -32,7 +34,8 @@ ReactDOM.createRoot(document.getElementById("root")!, sentryRootOptions).render(
             <Route path="men" element={<CategoryPage title="남성" />} />
             <Route path="women" element={<CategoryPage title="여성" />} />
             <Route path="lifestyle" element={<CategoryPage title="생활" />} />
-            <Route path="brands" element={<CategoryPage title="브랜드" />} />
+            <Route path="brands" element={<BrandsPage />} />
+            <Route path="brands/:slug" element={<BrandProductsPage />} />
             <Route path="sale" element={<CategoryPage title="세일" />} />
             <Route path="empty" element={<EmptyPage />} />
             {/*<Route path="/" element={<LoginPage />} />*/}
