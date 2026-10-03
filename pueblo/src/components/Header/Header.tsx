@@ -18,7 +18,9 @@ const Header = () => {
     <HeaderContainer>
       <HeaderTop>
         <LeftNav>
-          <NavItem>검색</NavItem>
+          <NavItem>
+            <Link to="/search" style={{ textDecoration: "none", color: "inherit" }}>검색</Link>
+          </NavItem>
           <NavItem>관심목록</NavItem>
         </LeftNav>
 
