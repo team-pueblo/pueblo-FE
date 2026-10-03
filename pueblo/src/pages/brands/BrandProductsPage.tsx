@@ -13,7 +13,7 @@ export default function BrandProductsPage() {
   const products = getBrandProducts(brand.name);
   return <S.Page>
     <S.BackLink to="/brands">전체 브랜드</S.BackLink>
-    <S.Heading><h1>{brand.name}</h1><p>{brand.korean}</p></S.Heading>
+    <S.Heading><S.BrandLogo src={`/images/brands/${brand.slug}.png`} alt="" width={100} height={52} /><h1>{brand.name}</h1><p>{brand.korean}</p></S.Heading>
     <S.Count>상품 {products.length}</S.Count>
     {products.length ? <ProductListing products={products} /> : <S.Empty>
       <p>상품을 준비 중입니다.</p>

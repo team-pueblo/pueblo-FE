@@ -12,6 +12,7 @@ export const Page = styled.div`
 
 export const Heading = styled.div`
   margin-bottom: 28px;
+  img { margin-bottom: 20px; }
   h1 { font-size: 18px; font-weight: 400; margin: 0 0 10px; }
   p { margin: 0; color: #777; font-size: 12px; }
 `;
@@ -43,20 +44,32 @@ export const Grid = styled.div`
 `;
 
 export const BrandLink = styled(Link)`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16px;
   align-items: center;
-  gap: 8px;
+  gap: 16px 8px;
   min-width: 0;
-  min-height: 96px;
+  padding: 24px 0;
   border-bottom: 1px solid #eee;
   color: inherit;
   text-decoration: none;
+  > img { grid-column: 1 / -1; }
+  > div { min-width: 0; }
   strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.5; overflow-wrap: anywhere; }
   span { display: block; color: #888; font-size: 12px; margin-top: 6px; }
   svg { flex-shrink: 0; color: #888; }
   &:hover { color: #666; }
   &:focus-visible { outline: 1px solid #222; outline-offset: 3px; }
+`;
+
+export const BrandLogo = styled.img`
+  display: block;
+  width: 100px;
+  max-width: 100%;
+  height: 52px;
+  object-fit: contain;
+  object-position: left center;
+  @media (max-width: 768px) { width: 88px; height: 46px; }
 `;
 
 export const BackLink = styled(Link)`
