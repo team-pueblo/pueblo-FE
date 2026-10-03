@@ -111,11 +111,14 @@ export const EmptyBandStyled = styled.section`
 /* ---------- 리스트 & 카드 ---------- */
 export const ListStyled = styled.section`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.lg} 0;
 `;
 
 export const ItemCardStyled = styled.div`
+  min-width: 0;
   display: grid;
   grid-template-columns: 18px 80px minmax(0, 1fr);
   align-items: start;
@@ -252,12 +255,16 @@ export const PriceBoxStyled = styled.div`
 /* ---------- 쿠폰 / 배송 / 합계 ---------- */
 export const SectionStyled = styled.section`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: ${({ theme }) => theme.spacing.sm};
   padding-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const CouponBoxStyled = styled.div`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 10px;
   padding: ${({ theme }) => theme.spacing.sm};
   border: 1px solid #eee;
@@ -265,11 +272,13 @@ export const CouponBoxStyled = styled.div`
   background: ${({ theme }) => theme.colors.surface};
 
   .row {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-width: 0;
     gap: ${({ theme }) => theme.spacing.xs};
   }
   input {
-    flex: 1;
+    width: 100%;
     min-width: 0;
     height: 40px;
     padding: 0 ${({ theme }) => theme.spacing.sm};
@@ -287,10 +296,12 @@ export const CouponBoxStyled = styled.div`
     color: #000;
   }
   .hint {
+    overflow-wrap: anywhere;
     font-size: 12px;
     color: #555;
   }
   .error {
+    overflow-wrap: anywhere;
     color: ${({ theme }) => theme.colors.danger};
   }
   @media (max-width: 768px) {
@@ -302,6 +313,8 @@ export const CouponBoxStyled = styled.div`
 
 export const ShippingBoxStyled = styled.div`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: ${({ theme }) => theme.spacing.xs};
   padding: ${({ theme }) => theme.spacing.sm};
   border: 1px solid #eee;
@@ -310,6 +323,8 @@ export const ShippingBoxStyled = styled.div`
 `;
 
 export const RadioStyled = styled.label<{ $active?: boolean }>`
+  min-width: 0;
+  > div { min-width: 0; overflow-wrap: anywhere; }
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
@@ -331,6 +346,8 @@ export const RadioStyled = styled.label<{ $active?: boolean }>`
 
 export const SummaryCardStyled = styled.div`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 22px;
   .line, .total {
     display: flex;
