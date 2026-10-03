@@ -3,6 +3,8 @@
 import styled from "styled-components";
 
 export const FooterContainer = styled.footer`
+  box-sizing: border-box;
+
   bottom: 0;
   left: 0;
   width: 100%;
@@ -30,6 +32,10 @@ export const FooterText = styled.p`
   @media (max-width: 768px) {
     font-size: 2.5vw;
   }
+  @media (max-width: 768px) {
+    font-size: 11px;
+  }
+
 `;
 
 export const FooterLinks = styled.p`
@@ -42,4 +48,9 @@ export const FooterLinks = styled.p`
   @media (max-width: 768px) {
     font-size: 2.2vw;
   }
+  @media (max-width: 768px) {
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+
 `;

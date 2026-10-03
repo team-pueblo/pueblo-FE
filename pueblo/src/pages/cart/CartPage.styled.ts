@@ -38,6 +38,10 @@ export const TitleStyled = styled.h1`
   font-size: 1.4vw;
   font-weight: 400;
   text-align: left;
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
 `;
 
 export const TabsStyled = styled.div`
@@ -121,6 +125,12 @@ export const ItemCardStyled = styled.div`
   border-radius: 0;
   background: ${({ theme }) => theme.colors.surface};
   box-shadow: none;
+  @media (max-width: 768px) {
+    grid-template-columns: 20px 64px minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px 8px;
+  }
+
 `;
 
 export const ThumbStyled = styled.img`
@@ -130,6 +140,11 @@ export const ThumbStyled = styled.img`
   object-fit: cover;
   border-radius: 0;
   border: 1px solid #eee;
+  @media (max-width: 768px) {
+    width: 64px;
+    height: 84px;
+  }
+
 `;
 
 export const ItemDetailsStyled = styled.div`
@@ -139,6 +154,12 @@ export const ItemDetailsStyled = styled.div`
   min-width: 0;
   min-height: 96px;
   gap: 12px;
+  @media (max-width: 768px) {
+    gap: 12px;
+    > div { flex-wrap: wrap; gap: 8px; }
+    > div:first-child { flex-wrap: nowrap; align-items: flex-start; }
+  }
+
 `;
 
 export const ItemMetaStyled = styled.div`
@@ -171,6 +192,11 @@ export const ItemMetaStyled = styled.div`
     font-size: 11px;
     color: #555;
   }
+  @media (max-width: 768px) {
+    .name { white-space: normal; overflow-wrap: anywhere; line-height: 1.5; }
+    .sub { line-height: 1.5; overflow-wrap: anywhere; }
+  }
+
 `;
 
 export const RowStyled = styled.div`
@@ -198,6 +224,12 @@ export const QtyControlStyled = styled.div`
     font-weight: 500;
     color: #000;
   }
+  @media (max-width: 768px) {
+    gap: 0;
+    button { width: 40px; height: 44px; }
+    .qty { width: 28px; }
+  }
+
 `;
 
 export const PriceBoxStyled = styled.div`
@@ -211,6 +243,10 @@ export const PriceBoxStyled = styled.div`
     font-size: 12px;
     color: #555;
   }
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
 `;
 
 /* ---------- 쿠폰 / 배송 / 합계 ---------- */
@@ -257,6 +293,11 @@ export const CouponBoxStyled = styled.div`
   .error {
     color: ${({ theme }) => theme.colors.danger};
   }
+  @media (max-width: 768px) {
+    input { min-width: 0; font-size: 16px; }
+    button { min-height: 44px; }
+  }
+
 `;
 
 export const ShippingBoxStyled = styled.div`
@@ -415,6 +456,11 @@ export const RemoveButtonStyled = styled.button`
     outline: none;
     box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
   }
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 44px;
+  }
+
 `;
 
 export const InputStyled = styled.input`
@@ -429,6 +475,12 @@ export const InputStyled = styled.input`
     outline: none;
     box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
   }
+  @media (max-width: 768px) {
+    font-size: 16px;
+    min-width: 0;
+    min-height: 44px;
+  }
+
 `;
 
 export const CheckboxStyled = styled.input.attrs({ type: "checkbox" })`
@@ -668,6 +720,11 @@ export const CartLayoutStyled = styled.div`
     grid-template-columns: minmax(0, 1fr);
     gap: 32px;
   }
+  @media (max-width: 768px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
 `;
 
 export const CartContentStyled = styled.div`
@@ -685,6 +742,11 @@ export const SelectionBarStyled = styled.div`
   label { display: flex; align-items: center; gap: 12px; }
   button { border: 0; padding: 0; background: none; color: #444; }
   button:disabled { color: #888; cursor: default; }
+  @media (max-width: 768px) {
+    button, label { min-height: 44px; }
+    label { gap: 8px; }
+  }
+
 `;
 
 export const OrderPanelStyled = styled.aside`
@@ -712,6 +774,12 @@ export const OrderPanelStyled = styled.aside`
     line-height: 1.6;
   }
   @media (max-width: 600px) { position: static; }
+  @media (max-width: 768px) {
+    position: static;
+    padding: 20px 16px;
+    h2 { font-size: 16px; margin-bottom: 24px; }
+  }
+
 `;
 
 export const CheckoutButtonStyled = styled.button`
@@ -737,4 +805,8 @@ export const CheckoutButtonStyled = styled.button`
     width: auto;
     height: 14px;
   }
+  @media (max-width: 768px) {
+    min-height: 44px;
+  }
+
 `;

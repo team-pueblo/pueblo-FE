@@ -7,15 +7,26 @@ export const MainPageContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
 `;
 
 export const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 12px;
+  }
+
 `;
 
 export const ProductCard = styled(Link)`
+  min-width: 0;
+
   color: inherit;
   text-decoration: none;
 
@@ -45,22 +56,40 @@ export const ProductTag = styled.span`
   color: #ff4a4a;
   font-size: 13px;
   font-weight: 500;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
 `;
 
 export const ProductBrand = styled.p`
   font-size: 14px;
   font-weight: bold;
   margin: 0;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
 `;
 
 export const ProductName = styled.p`
   font-size: 14px;
   color: #333;
   margin: 0;
+  @media (max-width: 768px) {
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
 `;
 
 export const ProductPrice = styled.p`
   font-size: 15px;
   font-weight: 500;
   margin: 0;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
 `;

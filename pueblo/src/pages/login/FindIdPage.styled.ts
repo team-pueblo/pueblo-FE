@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mobileAuthLayout } from "./mobileAuthLayout";
 
 export const PageStyled = styled.div`
   min-height: calc(100dvh - 200px);
@@ -10,6 +11,8 @@ export const PageStyled = styled.div`
   justify-content: center;
   padding: ${({ theme }) => theme.spacing.lg} 0;
   box-sizing: border-box;
+  ${mobileAuthLayout}
+
 `;
 
 export const CardStyled = styled.div`
@@ -25,6 +28,10 @@ export const CardStyled = styled.div`
   @media (min-width: 640px) {
     padding: ${({ theme }) => theme.spacing.xl};
   }
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
+
 `;
 
 export const TitleStyled = styled.h2`
@@ -33,6 +40,11 @@ export const TitleStyled = styled.h2`
   margin: 0 0 ${({ theme }) => theme.spacing.lg};
   color: #000;
   text-align: left;
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
 `;
 
 export const FormStyled = styled.form`
