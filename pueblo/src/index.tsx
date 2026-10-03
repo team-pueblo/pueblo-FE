@@ -4,12 +4,7 @@ import "./index.css";
 import App from "./App";
 import { ThemeProvider } from "styled-components";
 
-const theme = {
-  colors: {
-    primary: "#3498db",
-    secondary: "#e74c3c",
-  },
-};
+import { theme } from "./theme/theme";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

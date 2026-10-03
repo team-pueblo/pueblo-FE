@@ -15,9 +15,10 @@ import ResetPasswordPage from "./pages/login/ResetPasswordPage";
 import { CartPage } from "./pages/cart/CartPage";
 import ProductDetailPage from "./pages/product/ProductDetailPage";
 import "./index.css";
+import { sentryRootOptions } from "./monitoring";
 
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")!, sentryRootOptions).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>

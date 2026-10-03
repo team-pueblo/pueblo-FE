@@ -100,7 +100,7 @@ const LoginPage: React.FC = () => {
   };
 
   const validatePassword = (password: string): boolean => {
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,20}$/;
     if (!password) {
       setPasswordError("비밀번호를 입력해주세요.");
       return false;
@@ -115,9 +115,9 @@ const LoginPage: React.FC = () => {
 
   const isFormValid = (): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,20}$/;
     
-    return email && emailRegex.test(email) && password && passwordRegex.test(password);
+    return Boolean(email && emailRegex.test(email) && password && passwordRegex.test(password));
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -52,10 +52,6 @@ const FindIdPage: React.FC = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate("/login");
-  };
-
   return (
     <PageStyled>
       <CardStyled>
