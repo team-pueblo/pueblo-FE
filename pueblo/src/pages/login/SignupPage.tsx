@@ -70,10 +70,6 @@ const SignupPage: React.FC = () => {
     navigate("/login");
   };
 
-  const handleBack = () => {
-    navigate("/login");
-  };
-
   return (
     <PageStyled>
       <CardStyled>
