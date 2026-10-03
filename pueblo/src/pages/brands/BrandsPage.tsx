@@ -17,6 +17,7 @@ export default function BrandsPage() {
     <S.Count role="status">브랜드 {filtered.length}</S.Count>
     {filtered.length ? <S.Grid>
       {filtered.map((brand) => <S.BrandLink key={brand.slug} to={`/brands/${brand.slug}`}>
+        <S.BrandLogo src={`/images/brands/${brand.slug}.png`} alt="" width={100} height={52} />
         <div><strong>{brand.name}</strong><span>{brand.korean}</span></div>
         <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden="true" />
       </S.BrandLink>)}
