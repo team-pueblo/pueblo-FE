@@ -51,7 +51,7 @@ const ResetPasswordPage: React.FC = () => {
     <PageStyled>
       <CardStyled>
         <IconContainer>
-          <VideoIcon autoPlay muted loop>
+          <VideoIcon autoPlay muted loop playsInline aria-hidden="true">
             <source src="/images/safety_lock.mp4" type="video/mp4" />
           </VideoIcon>
         </IconContainer>
