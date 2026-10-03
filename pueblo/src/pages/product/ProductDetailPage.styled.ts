@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Page = styled.div`
   color:#1a1a1a; background:#fff;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans KR", Roboto, Helvetica, Arial, sans-serif;
+  font-family: inherit;
 `;
 
 export const TopBar = styled.div`

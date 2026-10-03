@@ -14,6 +14,7 @@ export const ContainerStyled = styled.div`
   }
   font-size: 13px;
   font-family: inherit;
+  font-weight: 400;
 
   button, input {
     font: inherit;
@@ -34,8 +35,8 @@ export const HeaderStyled = styled.header`
 
 export const TitleStyled = styled.h1`
   margin: 0;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 1.4vw;
+  font-weight: 400;
   text-align: left;
 `;
 
@@ -98,7 +99,7 @@ export const EmptyBandStyled = styled.section`
   }
   .cta {
     color: #222;
-    font-weight: 600;
+    font-weight: 500;
     text-underline-offset: 3px;
   }
 `;
@@ -141,7 +142,7 @@ export const ItemMetaStyled = styled.div`
   }
   .name {
     margin-top: 2px;
-    font-weight: 600;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -184,7 +185,7 @@ export const QtyControlStyled = styled.div`
   .qty {
     width: 28px;
     text-align: center;
-    font-weight: 600;
+    font-weight: 500;
     color: #000;
   }
 `;
@@ -192,7 +193,7 @@ export const QtyControlStyled = styled.div`
 export const PriceBoxStyled = styled.div`
   text-align: right;
   .price {
-    font-weight: 700;
+    font-weight: 500;
     color: #000;
   }
   .fee {
@@ -288,7 +289,7 @@ export const SummaryCardStyled = styled.div`
   }
   .total {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
   }
   .total span:last-child { color: #ff3b30; }
   hr {
@@ -357,7 +358,7 @@ export const StickyBarStyled = styled.div`
     color: #555;
   }
   .info .value {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 15px;
     color: #000;
   }
@@ -429,7 +430,7 @@ export const RecoHeaderStyled = styled.div`
   h2 {
     margin: 0;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
   }
   button {
     border: none;
@@ -494,7 +495,7 @@ export const RecoPriceRowStyled = styled.div`
   justify-content: space-between;
 
   .price {
-    font-weight: 700;
+    font-weight: 500;
   }
   .wish {
     border: 1px solid #000;
@@ -540,7 +541,7 @@ export const EmptyStyled = styled.div`
   text-align: center;
 
   .title {
-    font-weight: 700;
+    font-weight: 500;
     color: #000;
   }
   .desc {
@@ -582,7 +583,7 @@ export const ModalHeaderStyled = styled.div`
   h3 {
     margin: 0;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: -0.01em;
   }
 `;
@@ -594,7 +595,7 @@ export const ModalBodyStyled = styled.div`
   h4 {
     margin: 0 0 ${({ theme }) => theme.spacing.xs};
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
   }
   p, li {
     font-size: 13px;
@@ -672,13 +673,13 @@ export const OrderPanelStyled = styled.aside`
   top: 24px;
   min-width: 0;
 
-  h2 { margin: 0 0 28px; font-size: 15px; font-weight: 600; }
+  h2 { margin: 0 0 28px; font-size: 1.4vw; font-weight: 400; }
   .continue {
     display: block;
     margin-top: 14px;
     color: #222;
     text-align: center;
-    font-weight: 600;
+    font-weight: 500;
     text-underline-offset: 3px;
   }
   ${AgreeBoxStyled} {
@@ -698,6 +699,6 @@ export const CheckoutButtonStyled = styled.button`
   border-radius: 5px;
   background: #111;
   color: #fff;
-  font-weight: 600;
+  font-weight: 500;
   &:disabled { background: #8c8c8c; cursor: not-allowed; }
 `;
