@@ -57,7 +57,7 @@ const ResetPasswordPage: React.FC = () => {
         </IconContainer>
         
         <TitleStyled>
-          F!tNow 계정의<br />
+          pueblo 계정의<br />
           비밀번호를 재설정합니다
         </TitleStyled>
         <DescriptionStyled>

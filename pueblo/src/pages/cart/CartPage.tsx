@@ -1,9 +1,15 @@
 // 1) React / 라이브러리
 import React, { useEffect, useMemo, useReducer, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // 3) 상대경로 import (부모 → 자식)
 import {
   ContainerStyled,
+  CartLayoutStyled,
+  CartContentStyled,
+  SelectionBarStyled,
+  OrderPanelStyled,
+  CheckoutButtonStyled,
   HeaderStyled,
   TitleStyled,
   ListStyled,
@@ -19,24 +25,10 @@ import {
   RadioStyled,
   SummaryCardStyled,
   AgreeBoxStyled,
-  StickyBarStyled,
-  EmptyStyled,
   ButtonStyled,
   InputStyled,
   CheckboxStyled,
-  TabsStyled,
-  TabItemStyled,
   EmptyBandStyled,
-  RecoSectionStyled,
-  RecoHeaderStyled,
-  RecoGridStyled,
-  RecoCardStyled,
-  RecoThumbWrapStyled,
-  RecoThumbStyled,
-  RecoMetaStyled,
-  RecoPriceRowStyled,
-  DividerStyled,
-  TabsIndicatorStyled,
   ModalOverlayStyled,
   ModalContentStyled,
   ModalHeaderStyled,
@@ -102,50 +94,6 @@ const SEED: CartItem[] = [
     seller: "한정판샵 B",
     condition: "미개봉",
     limited: false,
-  },
-];
-
-// 추천 상품 (데모)
-const RECO_SEED: CartItem[] = [
-  {
-    id: "nk-aj1-03",
-    brand: "NIKE",
-    name: "Air Jordan 1 Retro High",
-    price: 359000,
-    img: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
-  },
-  {
-    id: "ad-forum-04",
-    brand: "ADIDAS",
-    name: "Forum 84 Low",
-    price: 159000,
-    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
-  },
-  {
-    id: "nb-2002r-05",
-    brand: "NEW BALANCE",
-    name: "2002R",
-    price: 189000,
-    img: "https://images.unsplash.com/photo-1620799139509-41b4ad0c000d?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
-  },
-  {
-    id: "cnv-ct70-06",
-    brand: "CONVERSE",
-    name: "Chuck 70",
-    price: 99000,
-    img: "https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
-  },
-  {
-    id: "nk-dunk-07",
-    brand: "NIKE",
-    name: "Dunk Low",
-    price: 179000,
-    img: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
   },
 ];
 
@@ -246,8 +194,13 @@ export const CartPage: React.FC = () => {
   });
 
   const [toast, setToast] = useState<string>("");
-  const [wishes, setWishes] = useState<Record<string, boolean>>({});
-  const [activeTab, setActiveTab] = useState<"fitnow" | "brand">("fitnow");
+  const navigate = useNavigate();
+  const [excludedIds, setExcludedIds] = useState<string[]>([]);
+  const selectedItems = useMemo(
+    () => state.items.filter((item) => !excludedIds.includes(item.id)),
+    [state.items, excludedIds],
+  );
+  const allSelected = state.items.length > 0 && selectedItems.length === state.items.length;
   const [policyOpen, setPolicyOpen] = useState<boolean>(false);
 
 
@@ -299,93 +252,59 @@ useEffect(() => {
   }, [state]);
 
   const totals = useMemo(() => {
-    const subtotalItems = state.items.reduce(
+    const subtotalItems = selectedItems.reduce(
       (acc, it) => acc + it.price * it.qty + (it.fee || 0) * it.qty,
       0,
     );
-    const coupon = applyCoupon(subtotalItems, state.code);
-    const ship = getShippingFee(state.shipping, state.items.length);
+    const coupon = applyCoupon(subtotalItems, selectedItems.length ? state.code : "");
+    const ship = getShippingFee(state.shipping, selectedItems.length);
     const service = getServiceFee(subtotalItems);
     const discount = Math.min(coupon.discount, subtotalItems + service + ship);
     const total = Math.max(0, subtotalItems + service + ship - discount);
     return { subtotalItems, ship, service, coupon, discount, total };
-  }, [state.items, state.code, state.shipping]);
-
-  const itemCount = state.items.reduce((n, it) => n + it.qty, 0);
-  const brandCount = 0; // 브랜드 배송 (연동 전 0 고정)
-
-  const addToCart = (it: CartItem) => {
-    dispatch({ type: "ADD", item: it });
-    setToast("장바구니에 담았습니다.");
-  };
-
-  const toggleWish = (id: string) => {
-    setWishes((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  }, [selectedItems, state.code, state.shipping]);
 
   return (
     <ContainerStyled>
-      {/* Header + Tabs */}
-      <HeaderStyled>
-        <TitleStyled>장바구니</TitleStyled>
-
-        <TabsStyled>
-          <TabItemStyled
-            $active={activeTab === "fitnow"}
-            onClick={() => setActiveTab("fitnow")}
-          >
-            <div className="count">{itemCount}</div>
-            <div className="label">F!t Now 배송</div>
-          </TabItemStyled>
-
-          <TabItemStyled
-            $active={activeTab === "brand"}
-            onClick={() => setActiveTab("brand")}
-          >
-            <div className="count">{brandCount}</div>
-            <div className="label">브랜드 배송</div>
-          </TabItemStyled>
-
-          {/* 이동하는 하이라이터 */}
-          <TabsIndicatorStyled $index={activeTab === "fitnow" ? 0 : 1} />
-        </TabsStyled>
-      </HeaderStyled>
-
-      {/* Empty band */}
-      {state.items.length === 0 && (
-        <EmptyBandStyled>
-          <p className="msg">
-            장바구니에 담긴 상품이 없습니다.
-            <br />
-            원하는 상품을 장바구니에 담아보세요!
-          </p>
-          <a className="cta" href="/shop">
-            SHOP 바로가기
-          </a>
-        </EmptyBandStyled>
-      )}
-
+      <CartLayoutStyled>
+        <CartContentStyled>
+          <HeaderStyled><TitleStyled>장바구니</TitleStyled></HeaderStyled>
+          <SelectionBarStyled>
+            <label>
+              <CheckboxStyled
+                checked={allSelected}
+                disabled={state.items.length === 0}
+                ref={(node) => { if (node) node.indeterminate = selectedItems.length > 0 && !allSelected; }}
+                onChange={(event) => setExcludedIds(event.target.checked ? [] : state.items.map((item) => item.id))}
+              />
+              전체 선택
+            </label>
+            <button
+              disabled={selectedItems.length === 0}
+              onClick={() => {
+                dispatch({ type: "INIT", payload: state.items.filter((item) => excludedIds.includes(item.id)) });
+                setToast("선택한 상품을 삭제했습니다.");
+              }}
+            >선택상품 삭제</button>
+          </SelectionBarStyled>
+          {state.items.length === 0 && (
+            <EmptyBandStyled>
+              <p className="msg">장바구니에 담은 상품이 없습니다.</p>
+              <Link className="cta" to="/">계속 쇼핑하기</Link>
+            </EmptyBandStyled>
+          )}
       {/* Items */}
+      {state.items.length > 0 && (
       <ListStyled>
-        {state.items.length === 0 ? (
-          <EmptyStyled>
-            <div className="title">장바구니가 비어 있어요</div>
-            <div className="desc">원하는 상품을 담아 결제를 시작해보세요.</div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <ButtonStyled>인기 상품 보러가기</ButtonStyled>
-              <ButtonStyled
-                onClick={() => {
-                  dispatch({ type: "INIT", payload: SEED });
-                  setToast("데모 상품을 담았습니다.");
-                }}
-              >
-                데모 상품 담기
-              </ButtonStyled>
-            </div>
-          </EmptyStyled>
-        ) : (
-          state.items.map((it) => (
+        {state.items.map((it) => (
             <ItemCardStyled key={it.id}>
+              <CheckboxStyled
+                aria-label={`${it.name} 선택`}
+                checked={!excludedIds.includes(it.id)}
+                onChange={(event) => setExcludedIds((ids) => event.target.checked
+                  ? ids.filter((id) => id !== it.id)
+                  : [...ids, it.id])}
+              />
               <ThumbStyled src={it.img} alt={it.name} />
               <div>
                 <RowStyled>
@@ -437,12 +356,12 @@ useEffect(() => {
                 </RowStyled>
               </div>
             </ItemCardStyled>
-          ))
-        )}
+          ))}
       </ListStyled>
+      )}
 
-      {/* Coupon / Shipping / Summary / Agreement */}
-      <SectionStyled>
+          {state.items.length > 0 && (
+            <SectionStyled>
         <CouponBoxStyled>
           <RowStyled>
             <strong>쿠폰/프로모션</strong>
@@ -512,34 +431,23 @@ useEffect(() => {
           </RadioStyled>
         </ShippingBoxStyled>
 
-        <SummaryCardStyled>
-          <div className="line">
-            <span>상품 금액</span>
-            <span>{numberFormat(totals.subtotalItems)}원</span>
-          </div>
-          <div className="line">
-            <span>서비스 수수료</span>
-            <span>{numberFormat(totals.service)}원</span>
-          </div>
-          <div className="line">
-            <span>배송비</span>
-            <span>{numberFormat(totals.ship)}원</span>
-          </div>
-          {totals.discount > 0 ? (
-            <div className="line">
-              <span>할인 ({applyCoupon(totals.subtotalItems, state.code).label})</span>
-              <span>-{numberFormat(totals.discount)}원</span>
-            </div>
-          ) : null}
-          <hr />
-          <div className="total">
-            <span>결제 예정 금액</span>
-            <span>{numberFormat(totals.total)}원</span>
-          </div>
-        </SummaryCardStyled>
-
+            </SectionStyled>
+          )}
+        </CartContentStyled>
+        <OrderPanelStyled aria-labelledby="order-info-title">
+          <h2 id="order-info-title">주문 정보</h2>
+          <SummaryCardStyled>
+            <div className="line"><span>상품 금액</span><span>{numberFormat(totals.subtotalItems)}원</span></div>
+            <div className="line"><span>상품 할인</span><span>-{numberFormat(totals.discount)}원</span></div>
+            <div className="line"><span>배송비</span><span>{numberFormat(totals.ship)}원</span></div>
+            {totals.service > 0 && <div className="line"><span>서비스 수수료</span><span>{numberFormat(totals.service)}원</span></div>}
+            <hr />
+            <div className="total"><span>총 결제 금액</span><span>{numberFormat(totals.total)}원</span></div>
+          </SummaryCardStyled>
+          {selectedItems.length > 0 && (
         <AgreeBoxStyled>
             <CheckboxStyled
+              aria-label="구매조건 및 환불·교환 정책 동의"
               checked={state.agreement}
               onChange={(e) => dispatch({ type: "AGREE", value: e.currentTarget.checked })}
             />
@@ -555,68 +463,14 @@ useEffect(() => {
               </button>
             </span>
         </AgreeBoxStyled>
-
-      </SectionStyled>
-
-      <DividerStyled />
-
-      {/* 추천 상품 */}
-      <RecoSectionStyled aria-label="추천 상품">
-        <RecoHeaderStyled>
-          <h2>이런 상품은 어떠세요?</h2>
-          <button onClick={() => setToast("추천 알고리즘 안내")}>
-            더 보기
-          </button>
-        </RecoHeaderStyled>
-
-        <RecoGridStyled>
-          {RECO_SEED.map((p) => (
-            <RecoCardStyled key={p.id}>
-              <RecoThumbWrapStyled>
-                <RecoThumbStyled src={p.img} alt={p.name} />
-              </RecoThumbWrapStyled>
-              <RecoMetaStyled>
-                <div className="brand">{p.brand}</div>
-                <div className="name">{p.name}</div>
-              </RecoMetaStyled>
-              <RecoPriceRowStyled>
-                <div className="price">{numberFormat(p.price)}원</div>
-                <div style={{ display: "flex", gap: 6 }}>
-                  <button className="wish" onClick={() => setToast("로그인 필요")}>
-                    {wishes[p.id] ? "★" : "☆"}
-                  </button>
-                  <button className="wish" onClick={() => addToCart(p)}>
-                    담기
-                  </button>
-                </div>
-              </RecoPriceRowStyled>
-            </RecoCardStyled>
-          ))}
-        </RecoGridStyled>
-      </RecoSectionStyled>
-
-      {/* Sticky Checkout Bar */}
-      <StickyBarStyled>
-        <div className="inner">
-          <div className="info">
-            <div className="label">총 {itemCount}개 · 결제 예정</div>
-            <div className="value">{numberFormat(totals.total)}원</div>
-          </div>
-          <button
-            disabled={!state.agreement || state.items.length === 0}
-            className="primary"
-            onClick={() => setToast("결제 플로우로 이동")}
-          >
-            결제하기
-          </button>
-          <button onClick={() => setToast("주문서 요약 열기")}>
-            상세보기
-          </button>
-          {state.items.length > 0 ? (
-            <button onClick={() => dispatch({ type: "CLEAR" })}>전체 비우기</button>
-          ) : null}
-        </div>
-      </StickyBarStyled>
+          )}
+          <CheckoutButtonStyled
+            disabled={selectedItems.length === 0 || !state.agreement}
+            onClick={() => navigate("/login")}
+          >회원 구매</CheckoutButtonStyled>
+          <Link className="continue" to="/">계속 쇼핑하기</Link>
+        </OrderPanelStyled>
+      </CartLayoutStyled>
 
       {/* 환불/교환 정책 모달 */}
         {policyOpen && (

@@ -11,29 +11,29 @@ const brandCategories = [
   "악세사리",
 ];
 
-const MainHeader: React.FC = () => {
-  const [activeNav] = useState("브랜드");
+const MainHeader: React.FC<{ title?: string }> = ({ title = "ASICS" }) => {
   const [activeCategory, setActiveCategory] = useState("전체");
 
   return (
     <S.MainHeaderContainer>
-      {activeNav === "브랜드" && (
         <S.SubNavContainer>
-          <S.BrandTitle>ASICS</S.BrandTitle>
+          <S.BrandTitle>{title}</S.BrandTitle>
           <S.CategoryContainer>
             {brandCategories.map((category) => (
               <S.CategoryLink
                 key={category}
                 href="#"
                 $isActive={activeCategory === category}
-                onClick={() => setActiveCategory(category)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActiveCategory(category);
+                }}
               >
                 {category}
               </S.CategoryLink>
             ))}
           </S.CategoryContainer>
         </S.SubNavContainer>
-      )}
     </S.MainHeaderContainer>
   );
 };

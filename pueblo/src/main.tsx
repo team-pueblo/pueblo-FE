@@ -7,6 +7,7 @@ import App from "./App";
 import MyPage from "./pages/mypage/MyPage";
 import FavoritesPage from "./pages/mypage/FavoritesPage";
 import MainPage from "./pages/Main/MainPage";
+import CategoryPage from "./pages/Main/CategoryPage";
 import EmptyPage from "./pages/Main/EmptyPage";
 import LoginPage from "./pages/login/LoginPage";
 import FindIdPage from "./pages/login/FindIdPage";
@@ -25,6 +26,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<MainPage />} />
+            <Route path="men" element={<CategoryPage title="남성" />} />
+            <Route path="women" element={<CategoryPage title="여성" />} />
+            <Route path="lifestyle" element={<CategoryPage title="생활" />} />
+            <Route path="brands" element={<CategoryPage title="브랜드" />} />
+            <Route path="sale" element={<CategoryPage title="세일" />} />
             <Route path="empty" element={<EmptyPage />} />
             <Route path="mypage" element={<MyPage />} />
             <Route path="mypage/favorites" element={<FavoritesPage />} />

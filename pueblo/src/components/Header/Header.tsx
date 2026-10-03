@@ -5,8 +5,10 @@ import {
   LeftNav,
   RightNav,
   Logo,
+  LogoImage,
   NavItem,
   CategoryMenu,
+  CategoryLink,
   HighlightItem,
 } from "./Header.styled";
 import { Link } from "react-router-dom";
@@ -16,21 +18,17 @@ const Header = () => {
     <HeaderContainer>
       <HeaderTop>
         <LeftNav>
-          <NavItem>알림센터</NavItem>
-          <NavItem>응모</NavItem>
-          <NavItem>매장 정보</NavItem>
-          <NavItem>에디토리얼</NavItem>
+          <NavItem>검색</NavItem>
+          <NavItem>관심목록</NavItem>
         </LeftNav>
 
         <Logo>
           <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-            FitNow
+            <LogoImage src="/images/pueblo_logo.png" alt="pueblo" />
           </Link>
         </Logo>
 
         <RightNav>
-          <NavItem>검색</NavItem>
-          <NavItem>관심목록</NavItem>
           <NavItem>
             <Link
               to="/cart"
@@ -52,11 +50,11 @@ const Header = () => {
 
       <HeaderBottom>
         <CategoryMenu>
-          <NavItem>남성</NavItem>
-          <NavItem>여성</NavItem>
-          <NavItem>생활</NavItem>
-          <NavItem>브랜드</NavItem>
-          <HighlightItem>세일</HighlightItem>
+          <NavItem><CategoryLink to="/men">남성</CategoryLink></NavItem>
+          <NavItem><CategoryLink to="/women">여성</CategoryLink></NavItem>
+          <NavItem><CategoryLink to="/lifestyle">생활</CategoryLink></NavItem>
+          <NavItem><CategoryLink to="/brands">브랜드</CategoryLink></NavItem>
+          <HighlightItem><CategoryLink to="/sale">세일</CategoryLink></HighlightItem>
         </CategoryMenu>
       </HeaderBottom>
     </HeaderContainer>
