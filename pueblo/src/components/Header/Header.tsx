@@ -19,7 +19,9 @@ const Header = () => {
       <HeaderTop>
         <LeftNav>
           <NavItem>검색</NavItem>
-          <NavItem>관심목록</NavItem>
+          <NavItem>
+            <Link to="/favorites" style={{ textDecoration: "none", color: "inherit" }}>관심목록</Link>
+          </NavItem>
         </LeftNav>
 
         <Logo>

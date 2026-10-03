@@ -14,6 +14,7 @@ import SignupPage from "./pages/login/SignupPage";
 import ResetPasswordPage from "./pages/login/ResetPasswordPage";
 import { CartPage } from "./pages/cart/CartPage";
 import ProductDetailPage from "./pages/product/ProductDetailPage";
+import FavoritesPage from "./pages/favorites/FavoritesPage";
 import "./index.css";
 import { sentryRootOptions } from "./monitoring";
 
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")!, sentryRootOptions).render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<MainPage />} />
+            <Route path="favorites" element={<FavoritesPage />} />
             <Route path="men" element={<CategoryPage title="남성" />} />
             <Route path="women" element={<CategoryPage title="여성" />} />
             <Route path="lifestyle" element={<CategoryPage title="생활" />} />
