@@ -54,4 +54,3 @@ export const catalogProducts = [
     isNew: false,
   },
 ];
-
