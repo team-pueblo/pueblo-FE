@@ -62,21 +62,27 @@ const FindIdPage: React.FC = () => {
             <LabelStyled>핸드폰 번호</LabelStyled>
             <PhoneInputContainer>
               <PhoneInput
-                type="text"
+                type="tel"
+                inputMode="numeric"
+                aria-label="휴대폰 번호 앞자리"
                 placeholder="010"
                 value={phoneNumber.first}
                 onChange={(e) => handlePhoneChange("first", e.target.value)}
                 maxLength={3}
               />
               <PhoneInput
-                type="text"
+                type="tel"
+                inputMode="numeric"
+                aria-label="휴대폰 번호 중간자리"
                 placeholder="0000"
                 value={phoneNumber.second}
                 onChange={(e) => handlePhoneChange("second", e.target.value)}
                 maxLength={4}
               />
               <PhoneInput
-                type="text"
+                type="tel"
+                inputMode="numeric"
+                aria-label="휴대폰 번호 끝자리"
                 placeholder="0000"
                 value={phoneNumber.third}
                 onChange={(e) => handlePhoneChange("third", e.target.value)}
@@ -87,13 +93,16 @@ const FindIdPage: React.FC = () => {
 
           <ButtonContainer>
             <SendButton type="button" onClick={handleSendCode}>
-              인증번호 재발송
+              {isCodeSent ? "인증번호 재발송" : "인증번호 발송"}
             </SendButton>
             
             {isCodeSent && (
               <VerificationContainer>
                 <VerificationInput
                   type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  aria-label="인증번호"
                   placeholder="인증번호를 입력하세요"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}

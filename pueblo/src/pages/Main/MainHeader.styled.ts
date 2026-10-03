@@ -85,9 +85,9 @@ export const CategoryContainer = styled.div`
   gap: 2vw;
   width: 100%;
   @media (max-width: 768px) {
-    justify-content: flex-start;
+    justify-content: space-between;
     overflow-x: auto;
-    gap: 18px;
+    gap: 12px;
     padding-bottom: 4px;
   }
 
@@ -109,6 +109,7 @@ export const CategoryLink = styled.a<{ $isActive?: boolean }>`
     `}
   @media (max-width: 768px) {
     flex: 0 0 auto;
+    white-space: nowrap;
     font-size: 12px;
     min-height: 44px;
     display: flex;
