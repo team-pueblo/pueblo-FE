@@ -49,11 +49,13 @@ export const TitleStyled = styled.h2`
 
 export const FormStyled = styled.form`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const FieldStyled = styled.div`
   display: grid;
+  min-width: 0;
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
@@ -64,7 +66,8 @@ export const LabelStyled = styled.label`
 `;
 
 export const PhoneInputContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.sm};
   align-items: center;
   justify-content: center;
@@ -72,7 +75,7 @@ export const PhoneInputContainer = styled.div`
 `;
 
 export const PhoneInput = styled.input`
-  flex: 1;
+  width: 100%;
   min-width: 0;
   height: 38px;
   padding: 0 12px;
@@ -97,13 +100,14 @@ export const PhoneInput = styled.input`
 `;
 
 export const VerificationContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: ${({ theme }) => theme.spacing.sm};
   align-items: center;
 `;
 
 export const VerificationInput = styled.input`
-  flex: 1;
+  width: 100%;
   min-width: 0;
   height: 38px;
   padding: 0 12px;
@@ -139,8 +143,13 @@ export const VerifyButton = styled.button`
 
 export const ButtonContainer = styled.div`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: ${({ theme }) => theme.spacing.md};
   margin-top: ${({ theme }) => theme.spacing.lg};
+  @media (max-width: 768px) {
+    margin-top: 0;
+    gap: 12px;
+  }
 `;
 
 export const SendButton = styled.button`
