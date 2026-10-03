@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const PageStyled = styled.div`
   min-height: calc(100dvh - 200px);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,17 +12,18 @@ export const PageStyled = styled.div`
 `;
 
 export const CardStyled = styled.div`
+  box-sizing: border-box;
   width: 100%;
-  max-width: 500px;
-  padding: ${({ theme }) => theme.spacing.lg};
+  max-width: 464px;
+  padding: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.surface};
 `;
 
 export const TitleStyled = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes.xl};
-  font-weight: 700;
+  font-size: 1.4vw;
+  font-weight: 400;
   margin: 0 0 ${({ theme }) => theme.spacing.lg};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   text-align: left;
 `;
 
@@ -34,20 +38,23 @@ export const FieldStyled = styled.div`
 `;
 
 export const LabelStyled = styled.label`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 12px;
+  color: #000;
   text-align: left;
 `;
 
 export const InputStyled = styled.input`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  box-sizing: border-box;
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   outline: none;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
 
   &:focus {
@@ -58,13 +65,16 @@ export const InputStyled = styled.input`
 
 export const SelectStyled = styled.select`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  box-sizing: border-box;
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   outline: none;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
 
   &:focus {
@@ -80,11 +90,11 @@ export const GenderButtonContainer = styled.div`
 
 export const GenderButton = styled.button<{ $selected?: boolean }>`
   flex: 1;
-  height: 36px;
+  height: 38px;
   border: 1px solid ${({ theme, $selected }) => 
     $selected ? theme.colors.primary : theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   font-weight: 500;
   color: ${({ theme, $selected }) => 
     $selected ? theme.colors.onPrimary : theme.colors.textPrimary};
@@ -113,13 +123,18 @@ export const FileInput = styled.input`
 `;
 
 export const FileLabel = styled.label`
-  display: block;
+  display: flex;
+  align-items: center;
+  overflow-wrap: anywhere;
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  box-sizing: border-box;
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 13px;
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
   cursor: pointer;
   text-align: left;
@@ -137,11 +152,12 @@ export const ButtonContainer = styled.div`
 `;
 
 export const SignupButton = styled.button`
+  font-size: 13px;
   width: 100%;
-  height: 36px;
+  height: 38px;
   border: 0;
   border-radius: 0;
-  font-weight: 700;
+  font-weight: 500;
   color: ${({ theme }) => theme.colors.onPrimary};
   background: ${({ theme }) => theme.colors.primary};
   cursor: pointer;

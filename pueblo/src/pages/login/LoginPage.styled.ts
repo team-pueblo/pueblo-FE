@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const PageStyled = styled.div`
   min-height: calc(100dvh - 200px);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,8 +12,9 @@ export const PageStyled = styled.div`
 `;
 
 export const CardStyled = styled.div`
+  box-sizing: border-box;
   width: 100%;
-  max-width: 480px;
+  max-width: 464px;
   padding: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.surface};
 
@@ -20,16 +24,16 @@ export const CardStyled = styled.div`
 `;
 
 export const TitleStyled = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes.xl};
-  font-weight: 700;
+  font-size: 1.4vw;
+  font-weight: 400;
   margin: 0 0 ${({ theme }) => theme.spacing.lg};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   text-align: left;
 `;
 
 export const ErrorTextStyled = styled.p`
   color: ${({ theme }) => theme.colors.danger};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-size: 12px;
   margin: 0;
   text-align: left;
   min-height: 1.2em;
@@ -46,21 +50,21 @@ export const FieldStyled = styled.div`
 `;
 
 export const LabelStyled = styled.label`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 12px;
+  color: #000;
   text-align: left;
 `;
 
 export const InputStyled = styled.input`
   width: 100%;
-  height: 48px;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   outline: none;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
   box-sizing: border-box;
 
@@ -80,8 +84,8 @@ export const CheckboxLabelStyled = styled.label`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.xs};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 12px;
+  color: #555;
 
   input[type="checkbox"] {
     width: 1rem;
@@ -94,18 +98,18 @@ export const LinkGroupStyled = styled.div`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: #555;
 
   button {
     background: none;
     border: 0;
     padding: 0;
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
     cursor: pointer;
 
     &:hover {
-      color: ${({ theme }) => theme.colors.textPrimary};
+      color: #000;
     }
   }
 
@@ -124,8 +128,8 @@ export const PrimaryButtonStyled = styled.button<{ $loading?: boolean }>`
   width: 100%;
   height: 40px;
   border: 0;
-  font-weight: 700;
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-weight: 500;
+  font-size: 13px;
   color: ${({ theme }) => theme.colors.onPrimary};
   background: ${({ theme }) => theme.colors.primary};
   cursor: pointer;
@@ -147,10 +151,10 @@ export const OutlineButtonStyled = styled.button`
   width: 100%;
   height: 40px;
   background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  border: 1px solid ${({ theme }) => theme.colors.textPrimary};
-  font-weight: 700;
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  color: #000;
+  border: 1px solid #000;
+  font-weight: 500;
+  font-size: 13px;
   cursor: pointer;
   transition: background 0.15s ease;
 
@@ -162,12 +166,12 @@ export const OutlineButtonStyled = styled.button`
 export const NoticeStyled = styled.p`
   margin-top: ${({ theme }) => theme.spacing.lg};
   text-align: center;
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 12px;
+  color: #555;
 
   .emph {
     color: ${({ theme }) => theme.colors.danger};
     text-decoration: underline;
-    font-weight: 700;
+    font-weight: 500;
   }
 `;

@@ -10,7 +10,7 @@ const KakaoButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 500;
   color: #000000;
   cursor: pointer;

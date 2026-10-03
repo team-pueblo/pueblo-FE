@@ -4,8 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme/theme";
 import App from "./App";
-import MyPage from "./pages/mypage/MyPage";
-import FavoritesPage from "./pages/mypage/FavoritesPage";
 import MainPage from "./pages/Main/MainPage";
 import CategoryPage from "./pages/Main/CategoryPage";
 import EmptyPage from "./pages/Main/EmptyPage";
@@ -32,8 +30,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="brands" element={<CategoryPage title="브랜드" />} />
             <Route path="sale" element={<CategoryPage title="세일" />} />
             <Route path="empty" element={<EmptyPage />} />
-            <Route path="mypage" element={<MyPage />} />
-            <Route path="mypage/favorites" element={<FavoritesPage />} />
             {/*<Route path="/" element={<LoginPage />} />*/}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cart" element={<CartPage />} />
