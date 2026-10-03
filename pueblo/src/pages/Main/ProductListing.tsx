@@ -2,9 +2,9 @@ import * as S from "./MainPage.styled";
 
 import { catalogProducts } from "../product/catalog";
 
-const ProductListing = () => (
+const ProductListing = ({ products = catalogProducts }: { products?: typeof catalogProducts }) => (
       <S.ProductGrid>
-        {catalogProducts.map((product) => (
+        {products.map((product) => (
           <S.ProductCard key={product.id} to={`/product/${product.id}`}>
             <S.ProductImage src={product.imageUrl} alt={product.name} />
             <S.ProductInfo>
