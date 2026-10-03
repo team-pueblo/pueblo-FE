@@ -12,7 +12,7 @@ export const HeaderContainer = styled.header`
   background-color: #fff;
   color: #000000;
 
-  font-family: sans-serif;
+  font-family: inherit;
 `;
 
 export const HeaderTop = styled.div`
