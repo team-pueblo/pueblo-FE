@@ -4,6 +4,7 @@ import { Bookmark, Heart, Share2, ChevronUp, ChevronDown } from "lucide-react";
 import { catalogProducts } from "./catalog";
 import { currency } from "./data";
 import { addCartItem } from "../cart/cartStorage";
+import { useFavorites } from "../favorites/useFavorites";
 import * as S from "./ProductDetailPage.styled";
 
 type CatalogProduct = (typeof catalogProducts)[number];
@@ -18,7 +19,9 @@ export default function ProductDetailPage() {
 }
 
 function ProductDetailContent({ product }: { product: CatalogProduct }) {
-  const [wish, setWish] = useState(false);
+  const { ids, setFavorite } = useFavorites();
+  const wish = ids.includes(product.id);
+  const [wishMessage, setWishMessage] = useState("");
   const [brandWish, setBrandWish] = useState(false);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState<Record<string, boolean>>({ details: true });
@@ -79,7 +82,14 @@ function ProductDetailContent({ product }: { product: CatalogProduct }) {
             <S.SmallText>상품 옵션을 준비 중입니다.</S.SmallText>
             <S.CTA>
               <div className="actions">
-                <S.IconBtn type="button" aria-label="상품 관심 등록" aria-pressed={wish} onClick={() => setWish(!wish)}>
+                <S.IconBtn type="button" aria-label={wish ? "상품 관심 해제" : "상품 관심 등록"} aria-pressed={wish} onClick={() => {
+                  try {
+                    setFavorite(product.id, !wish);
+                    setWishMessage(wish ? "관심목록에서 삭제했습니다." : "관심목록에 저장했습니다.");
+                  } catch {
+                    setWishMessage("관심목록을 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
+                  }
+                }}>
                   <Heart size={18} fill={wish ? "currentColor" : "none"} />
                 </S.IconBtn>
                 <S.IconBtn type="button" aria-label="상품 공유" onClick={share}><Share2 size={17} /></S.IconBtn>
@@ -87,6 +97,7 @@ function ProductDetailContent({ product }: { product: CatalogProduct }) {
               </div>
               <S.BuyButton disabled>구매하기</S.BuyButton>
             </S.CTA>
+            {wishMessage && <S.SmallText role="status">{wishMessage} <Link to="/favorites">관심목록 보기</Link></S.SmallText>}
             {message && <S.SmallText role="status">{message} <Link to="/cart">장바구니 보기</Link></S.SmallText>}
             <S.Accordion>
               {sections.map((section) => (

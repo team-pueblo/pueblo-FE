@@ -21,7 +21,9 @@ const Header = () => {
           <NavItem>
             <Link to="/search" style={{ textDecoration: "none", color: "inherit" }}>검색</Link>
           </NavItem>
-          <NavItem>관심목록</NavItem>
+          <NavItem>
+            <Link to="/favorites" style={{ textDecoration: "none", color: "inherit" }}>관심목록</Link>
+          </NavItem>
         </LeftNav>
 
         <Logo>
