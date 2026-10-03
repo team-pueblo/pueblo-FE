@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const MainPageContainer = styled.div`
   box-sizing: border-box;
@@ -14,7 +15,14 @@ export const ProductGrid = styled.div`
   gap: 20px;
 `;
 
-export const ProductCard = styled.div`
+export const ProductCard = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 4px;
+  }
   display: flex;
   flex-direction: column;
 `;

@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       <div>
         <FooterText>© 2025 pueblo. All rights reserved.</FooterText>
         <FooterLinks>
-          Team. 우아한 남매들 (김동민, 이조은, 이제현, 최홍석, 홍윤기) |
+          Team-pueblo(최홍석,허완) |
           이용약관 | 개인정보취급방침
         </FooterLinks>
       </div>

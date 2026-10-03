@@ -124,6 +124,7 @@ export const ItemCardStyled = styled.div`
 `;
 
 export const ThumbStyled = styled.img`
+  box-sizing: border-box;
   width: 80px;
   height: 96px;
   object-fit: cover;
@@ -131,24 +132,33 @@ export const ThumbStyled = styled.img`
   border: 1px solid #eee;
 `;
 
+export const ItemDetailsStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  min-height: 96px;
+  gap: 12px;
+`;
+
 export const ItemMetaStyled = styled.div`
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  gap: 3px;
+  line-height: 1.4;
   min-width: 0;
 
   .brand {
     color: #555;
     font-size: 12px;
+    font-weight: 600;
   }
   .name {
-    margin-top: 2px;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .sub {
-    margin-top: 2px;
     font-size: 12px;
     color: #555;
   }
@@ -291,7 +301,10 @@ export const SummaryCardStyled = styled.div`
     font-size: 15px;
     font-weight: 500;
   }
-  .total span:last-child { color: #ff3b30; }
+  .total span:last-child {
+    color: #ff3b30;
+    font-weight: 700;
+  }
   hr {
     width: 100%;
     border: 0;
@@ -381,12 +394,22 @@ export const StickyBarStyled = styled.div`
 `;
 
 /* ---------- 버튼/인풋/체크박스 ---------- */
-export const ButtonStyled = styled.button`
-  padding: 10px 14px;
+export const RemoveButtonStyled = styled.button`
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  padding: 0;
   border-radius: 0;
-  border: 1px solid #eee;
-  background: #fafafa;
-  color: #000;
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+
+  &:hover {
+    color: #555;
+  }
 
   &:focus-visible {
     outline: none;
@@ -692,13 +715,26 @@ export const OrderPanelStyled = styled.aside`
 `;
 
 export const CheckoutButtonStyled = styled.button`
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  min-height: 44px;
-  margin-top: 20px;
-  border: 0;
+  min-height: 36px;
+  margin: 16px auto 0;
+  padding: 0 12px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  background: #111;
-  color: #fff;
+  background: #fff;
+  color: #222;
   font-weight: 500;
-  &:disabled { background: #8c8c8c; cursor: not-allowed; }
+  cursor: pointer;
+  &:hover:not(:disabled) { background: #f8f9fa; }
+  &:disabled { color: #999; cursor: not-allowed; }
+  img {
+    display: block;
+    width: auto;
+    height: 14px;
+  }
 `;

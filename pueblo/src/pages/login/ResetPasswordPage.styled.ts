@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const PageStyled = styled.div`
   min-height: calc(100dvh - 200px);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,9 +12,10 @@ export const PageStyled = styled.div`
 `;
 
 export const CardStyled = styled.div`
+  box-sizing: border-box;
   width: 100%;
-  max-width: 500px;
-  padding: ${({ theme }) => theme.spacing.lg};
+  max-width: 464px;
+  padding: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.surface};
 `;
 
@@ -29,17 +33,17 @@ export const VideoIcon = styled.video`
 `;
 
 export const TitleStyled = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-size: 1.4vw;
   font-weight: 600;
   margin: 0 0 ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   text-align: left;
   line-height: 1.3;
 `;
 
 export const DescriptionStyled = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 12px;
+  color: #555;
   margin: 0 0 ${({ theme }) => theme.spacing.lg};
   text-align: left;
   line-height: 1.5;
@@ -56,19 +60,21 @@ export const FieldStyled = styled.div`
 `;
 
 export const LabelStyled = styled.label`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 12px;
+  color: #000;
   text-align: left;
 `;
 
 export const InputStyled = styled.input`
-  width: 94%;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  box-sizing: border-box;
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   outline: none;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
 
   &:focus {
@@ -88,9 +94,10 @@ export const ButtonContainer = styled.div`
 export const PrimaryButtonStyled = styled.button`
   width: auto;
   min-width: 80px;
-  height: 36px;
+  height: 38px;
+  font-size: 13px;
   border: 0;
-  font-weight: 600;
+  font-weight: 500;
   color: white;
   background: #9ca3af;
   cursor: pointer;
@@ -104,9 +111,10 @@ export const PrimaryButtonStyled = styled.button`
 
 export const OutlineButtonStyled = styled.button`
   width: auto;
-  height: 36px;
+  height: 38px;
+  font-size: 13px;
   background: transparent;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   border: none;
   border-radius: 0;
   font-weight: 400;
@@ -115,6 +123,6 @@ export const OutlineButtonStyled = styled.button`
   padding: 0;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.textSecondary};
+    color: #555;
   }
 `;

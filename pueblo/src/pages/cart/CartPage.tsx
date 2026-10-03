@@ -1,6 +1,8 @@
 // 1) React / 라이브러리
 import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
+import { readCart, saveCart, type CartItem } from "./cartStorage";
 
 // 3) 상대경로 import (부모 → 자식)
 import {
@@ -14,6 +16,7 @@ import {
   TitleStyled,
   ListStyled,
   ItemCardStyled,
+  ItemDetailsStyled,
   ThumbStyled,
   ItemMetaStyled,
   QtyControlStyled,
@@ -25,7 +28,7 @@ import {
   RadioStyled,
   SummaryCardStyled,
   AgreeBoxStyled,
-  ButtonStyled,
+  RemoveButtonStyled,
   InputStyled,
   CheckboxStyled,
   EmptyBandStyled,
@@ -42,20 +45,6 @@ import {
 // ==============================
 type ShippingMode = "일반" | "특급";
 
-type CartItem = {
-  id: string;
-  brand: string;
-  name: string;
-  option?: string;
-  price: number;
-  fee?: number;
-  img: string;
-  qty: number;
-  seller?: string;
-  condition?: "새상품" | "중고" | "미개봉";
-  limited?: boolean;
-};
-
 type State = {
   items: CartItem[];
   code: string;
@@ -66,37 +55,6 @@ type State = {
 // ==============================
 // Constants & Utils
 // ==============================
-const STORAGE_KEY = "CART_V1";
-
-const SEED: CartItem[] = [
-  {
-    id: "nk-dunk-01",
-    brand: "NIKE",
-    name: "Dunk Low Retro Panda",
-    option: "270",
-    price: 169000,
-    fee: 2000,
-    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
-    seller: "스니커즈셀러 A",
-    condition: "새상품",
-    limited: true,
-  },
-  {
-    id: "ad-yeezy-02",
-    brand: "ADIDAS",
-    name: "Yeezy Boost 350 V2",
-    option: "260",
-    price: 299000,
-    fee: 2000,
-    img: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=800&auto=format&fit=crop",
-    qty: 1,
-    seller: "한정판샵 B",
-    condition: "미개봉",
-    limited: false,
-  },
-];
-
 const numberFormat = (n: number): string =>
   new Intl.NumberFormat("ko-KR").format(n);
 
@@ -186,12 +144,7 @@ const reducer = (state: State, action: Action): State => {
 // Component
 // ==============================
 export const CartPage: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, {
-    items: [],
-    code: "",
-    shipping: "일반" as ShippingMode,
-    agreement: false,
-  });
+  const [state, dispatch] = useReducer(reducer, undefined, () => readCart());
 
   const [toast, setToast] = useState<string>("");
   const navigate = useNavigate();
@@ -210,21 +163,6 @@ export const CartPage: React.FC = () => {
     const timer = setTimeout(() => setToast(""), 2500);
     return () => clearTimeout(timer);
   }, [toast]);
-
-  // init (localStorage → fallback SEED)
-  useEffect(() => {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw) as State;
-        dispatch({ type: "INIT", payload: parsed.items || [] });
-      } catch {
-        dispatch({ type: "INIT", payload: SEED });
-      }
-    } else {
-      dispatch({ type: "INIT", payload: SEED });
-    }
-  }, []);
 
  useEffect(() => {
   if (!policyOpen) return;
@@ -247,8 +185,11 @@ useEffect(() => {
 
   // persist
   useEffect(() => {
-    const data: State = { ...state };
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    try {
+      saveCart(state);
+    } catch {
+      setToast("장바구니를 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
+    }
   }, [state]);
 
   const totals = useMemo(() => {
@@ -306,7 +247,7 @@ useEffect(() => {
                   : [...ids, it.id])}
               />
               <ThumbStyled src={it.img} alt={it.name} />
-              <div>
+              <ItemDetailsStyled>
                 <RowStyled>
                   <div style={{ minWidth: 0 }}>
                     <ItemMetaStyled>
@@ -320,19 +261,20 @@ useEffect(() => {
                       {it.limited ? <span className="limited">한정</span> : null}
                     </ItemMetaStyled>
                   </div>
-                  <ButtonStyled
-                    aria-label="remove"
+                  <RemoveButtonStyled
+                    type="button"
+                    aria-label={`${it.name} 삭제`}
                     onClick={() => {
                       dispatch({ type: "REMOVE", id: it.id });
                       setToast("상품을 삭제했습니다.");
                     }}
                     title="삭제"
                   >
-                    삭제
-                  </ButtonStyled>
+                    <Trash2 size={18} strokeWidth={1.6} aria-hidden="true" />
+                  </RemoveButtonStyled>
                 </RowStyled>
 
-                <RowStyled style={{ marginTop: 10 }}>
+                <RowStyled>
                   <QtyControlStyled>
                     <button onClick={() => dispatch({ type: "DEC", id: it.id })}>
                       -
@@ -354,7 +296,7 @@ useEffect(() => {
                     ) : null}
                   </PriceBoxStyled>
                 </RowStyled>
-              </div>
+              </ItemDetailsStyled>
             </ItemCardStyled>
           ))}
       </ListStyled>
@@ -424,7 +366,7 @@ useEffect(() => {
             <div>
               <div>특급</div>
               <div className="desc">
-                내일도착(일부 제외) ·{" "}
+                내일 도착(일부 제외) ·{" "}
                 {numberFormat(getShippingFee("특급", state.items.length))}원
               </div>
             </div>
@@ -467,7 +409,10 @@ useEffect(() => {
           <CheckoutButtonStyled
             disabled={selectedItems.length === 0 || !state.agreement}
             onClick={() => navigate("/login")}
-          >회원 구매</CheckoutButtonStyled>
+          >
+            <img src="/images/toss-pay.svg" alt="토스페이" />
+            결제하기
+          </CheckoutButtonStyled>
           <Link className="continue" to="/">계속 쇼핑하기</Link>
         </OrderPanelStyled>
       </CartLayoutStyled>

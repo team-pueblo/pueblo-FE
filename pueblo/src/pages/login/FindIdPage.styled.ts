@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 export const PageStyled = styled.div`
   min-height: calc(100dvh - 200px);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,14 +13,14 @@ export const PageStyled = styled.div`
 `;
 
 export const CardStyled = styled.div`
+  box-sizing: border-box;
   width: 100%;
-  max-width: 400px;
-  padding: ${({ theme }) => theme.spacing.lg};
+  max-width: 464px;
+  padding: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.surface};
   margin: 0 auto;
   flex-shrink: 0;
   position: relative;
-  transform: translateX(-170px);
 
   @media (min-width: 640px) {
     padding: ${({ theme }) => theme.spacing.xl};
@@ -25,10 +28,10 @@ export const CardStyled = styled.div`
 `;
 
 export const TitleStyled = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes.xl};
-  font-weight: 700;
+  font-size: 1.4vw;
+  font-weight: 400;
   margin: 0 0 ${({ theme }) => theme.spacing.lg};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   text-align: left;
 `;
 
@@ -43,8 +46,8 @@ export const FieldStyled = styled.div`
 `;
 
 export const LabelStyled = styled.label`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 12px;
+  color: #000;
   text-align: left;
 `;
 
@@ -58,14 +61,15 @@ export const PhoneInputContainer = styled.div`
 
 export const PhoneInput = styled.input`
   flex: 1;
-  height: 48px;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   outline: none;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
   text-align: center;
   box-sizing: border-box;
@@ -88,13 +92,14 @@ export const VerificationContainer = styled.div`
 
 export const VerificationInput = styled.input`
   flex: 1;
-  height: 48px;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-    font-size: ${({ theme }) => theme.fontSizes.md};
+    font-size: 13px;
   outline: none;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   background: ${({ theme }) => theme.colors.inputBg};
   box-sizing: border-box;
 
@@ -105,11 +110,11 @@ export const VerificationInput = styled.input`
 `;
 
 export const VerifyButton = styled.button`
-  height: 48px;
-  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  height: 38px;
+  padding: 0 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 13px;
+  color: #000;
   background: ${({ theme }) => theme.colors.surface};
   cursor: pointer;
   transition: background 0.15s ease;
@@ -131,8 +136,8 @@ export const SendButton = styled.button`
   height: 40px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   font-weight: 500;
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  font-size: 13px;
+  color: #000;
   background: ${({ theme }) => theme.colors.surface};
   cursor: pointer;
   transition: background 0.15s ease;
@@ -147,7 +152,7 @@ export const NextButton = styled.button<{ $disabled?: boolean }>`
   height: 40px;
   border: 0;
   font-weight: 500;
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: 13px;
   color: ${({ theme }) => theme.colors.onPrimary};
   background: ${({ $disabled, theme }) => 
     $disabled ? theme.colors.border : theme.colors.primary};
