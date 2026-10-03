@@ -22,6 +22,10 @@ export const HeaderTop = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+  @media (max-width: 768px) {
+    height: 104px;
+  }
+
 `;
 
 export const Logo = styled.h1`
@@ -35,6 +39,10 @@ export const Logo = styled.h1`
   white-space: nowrap;
   font-family: "Calisto MT", serif;
   line-height: 0;
+  @media (max-width: 768px) {
+    top: 28px;
+  }
+
 `;
 
 export const LogoImage = styled.img`
@@ -43,6 +51,11 @@ export const LogoImage = styled.img`
   height: min(6vh, 64px);
   object-fit: cover;
   object-position: center;
+  @media (max-width: 768px) {
+    width: 132px;
+    height: 48px;
+  }
+
 `;
 
 export const LeftNav = styled.ul`
@@ -57,6 +70,13 @@ export const LeftNav = styled.ul`
   padding: 0;
   font-size: 0.95vw;
   align-items: center;
+  @media (max-width: 768px) {
+    left: 16px;
+    top: 78px;
+    gap: 16px;
+    font-size: 12px;
+  }
+
 `;
 
 export const RightNav = styled.ul`
@@ -71,17 +91,35 @@ export const RightNav = styled.ul`
   padding: 0;
   font-size: 0.95vw;
   align-items: center;
+  @media (max-width: 768px) {
+    right: 16px;
+    top: 78px;
+    gap: 16px;
+    font-size: 12px;
+  }
+
 `;
 
 export const NavItem = styled.li`
   cursor: pointer;
   white-space: nowrap;
+  @media (max-width: 768px) {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    a { display: flex; align-items: center; min-height: 44px; }
+  }
+
 `;
 
 export const HeaderBottom = styled.div`
   border-top: 1px solid #dfdfdf;
   border-bottom: 1px solid #dfdfdf;
   padding: 1.2vh 0;
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+
 `;
 
 export const CategoryMenu = styled.ul`
@@ -92,6 +130,12 @@ export const CategoryMenu = styled.ul`
   padding: 0;
   margin: 0;
   font-size: 0.9vw;
+  @media (max-width: 768px) {
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+  }
+
 `;
 
 export const HighlightItem = styled(NavItem)`

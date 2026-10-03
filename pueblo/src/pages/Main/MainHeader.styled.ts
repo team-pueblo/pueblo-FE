@@ -12,6 +12,10 @@ export const MainHeaderContainer = styled.header`
   padding: 0 2vw 2vh 2vw;
   border-bottom: 1px solid #eee;
   box-sizing: border-box; /* 패딩 포함 계산 */
+  @media (max-width: 768px) {
+    padding: 8px 0 12px;
+  }
+
 `;
 
 export const NavContainer = styled.nav`
@@ -52,6 +56,10 @@ export const SubNavContainer = styled.div`
   gap: 2vh;
   width: 100%;
   text-align: center;
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
+
 `;
 
 export const BrandTitle = styled.p`
@@ -63,6 +71,11 @@ export const BrandTitle = styled.p`
   align-items: center;
   width: 100%;
   text-align: center;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    min-height: 32px;
+  }
+
 `;
 
 export const CategoryContainer = styled.div`
@@ -71,6 +84,13 @@ export const CategoryContainer = styled.div`
   align-items: center;
   gap: 2vw;
   width: 100%;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 18px;
+    padding-bottom: 4px;
+  }
+
 `;
 
 export const CategoryLink = styled.a<{ $isActive?: boolean }>`
@@ -87,4 +107,14 @@ export const CategoryLink = styled.a<{ $isActive?: boolean }>`
       font-weight: 500;
       color: #000;
     `}
+  @media (max-width: 768px) {
+    flex: 0 0 auto;
+    font-size: 12px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    border-bottom-width: 1px;
+  }
+
 `;

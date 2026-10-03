@@ -12,6 +12,10 @@ export const Page = styled.div`
 
 export const Container = styled.div`
   padding: 20px 20px 64px;
+  @media (max-width: 768px) {
+    padding: 16px 16px 48px;
+  }
+
 `;
 
 export const Main = styled.div`
@@ -20,17 +24,30 @@ export const Main = styled.div`
   gap: 32px;
   align-items: start;
   @media (max-width: 640px) { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  @media (max-width: 768px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
 `;
 
 export const Viewer = styled.div`
   min-width: 0;
   background: #fff;
   img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: contain; }
+  @media (max-width: 768px) {
+    img { max-height: 60svh; }
+  }
+
 `;
 
 export const Panel = styled.aside`
   min-width: 0;
   padding: 20px 0 0;
+  @media (max-width: 768px) {
+    padding-top: 0;
+  }
+
 `;
 
 export const PanelTop = styled.div`
@@ -40,6 +57,11 @@ export const PanelTop = styled.div`
   margin-bottom: 32px;
   .brand { font-size: 14px; font-weight: 600; }
   button { display: grid; place-items: center; padding: 4px; border: 0; background: none; cursor: pointer; }
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    button { min-width: 44px; min-height: 44px; }
+  }
+
 `;
 
 export const Title = styled.h1`
@@ -76,6 +98,11 @@ export const InfoLink = styled.button`
   text-underline-offset: 3px;
   cursor: pointer;
   margin-bottom: 28px;
+  @media (max-width: 768px) {
+    min-height: 44px;
+    margin-bottom: 16px;
+  }
+
 `;
 
 export const CTA = styled.div`
@@ -83,6 +110,10 @@ export const CTA = styled.div`
   gap: 8px;
   margin: 24px 0 28px;
   .actions { display: grid; grid-template-columns: 42px 42px minmax(0, 1fr); gap: 8px; }
+  @media (max-width: 768px) {
+    .actions { grid-template-columns: 44px 44px minmax(0, 1fr); }
+  }
+
 `;
 
 export const IconBtn = styled.button`
@@ -94,6 +125,10 @@ export const IconBtn = styled.button`
   place-items: center;
   color: #222;
   cursor: pointer;
+  @media (max-width: 768px) {
+    height: 44px;
+  }
+
 `;
 
 export const CartButton = styled.button`
@@ -104,6 +139,10 @@ export const CartButton = styled.button`
   color: #222;
   font-weight: 500;
   &:disabled { color: #888; cursor: not-allowed; }
+  @media (max-width: 768px) {
+    min-height: 44px;
+  }
+
 `;
 
 export const BuyButton = styled(CartButton)`
@@ -149,6 +188,10 @@ export const RecommendationList = styled.div`
   scroll-snap-type: x mandatory;
   padding-bottom: 12px;
   @media (max-width: 640px) { grid-auto-columns: 72%; }
+  @media (max-width: 768px) {
+    grid-auto-columns: 72%;
+  }
+
 `;
 export const RecommendationCard = styled(Link)`
   display: block;
