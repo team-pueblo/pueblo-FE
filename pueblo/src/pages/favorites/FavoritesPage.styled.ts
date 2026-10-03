@@ -56,5 +56,6 @@ export const EmptyState = styled.div`
   > svg { color: #888; }
   p { margin: 20px 0 8px; }
   span { display: block; color: #777; font-size: 12px; }
-  a { display: inline-flex; align-items: center; min-height: 44px; margin-top: 24px; padding: 0 20px; border: 1px solid #ddd; color: inherit; text-decoration: none; }
+  a { display: inline-flex; align-items: center; box-sizing: border-box; min-height: 34px; margin-top: 24px; padding: 0 16px; border: 1px solid #ddd; color: inherit; text-decoration: none; }
+  @media (max-width: 768px) { a { min-height: 44px; } }
 `;
