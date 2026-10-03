@@ -1,6 +1,7 @@
 // src/components/Header/styles.ts
 
 import styled, { createGlobalStyle } from "styled-components";
+import { NavLink } from "react-router-dom";
 
 export const HeaderContainer = styled.header`
   top: 0;
@@ -24,11 +25,24 @@ export const HeaderTop = styled.div`
 `;
 
 export const Logo = styled.h1`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   font-size: 1.9vw;
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
   font-family: "Calisto MT", serif;
+  line-height: 0;
+`;
+
+export const LogoImage = styled.img`
+  display: block;
+  width: clamp(120px, 14vw, 180px);
+  height: min(6vh, 64px);
+  object-fit: cover;
+  object-position: center;
 `;
 
 export const LeftNav = styled.ul`
@@ -83,6 +97,18 @@ export const CategoryMenu = styled.ul`
 export const HighlightItem = styled(NavItem)`
   color: red;
   font-weight: 500;
+`;
+
+export const CategoryLink = styled(NavLink)`
+  display: block;
+  color: inherit;
+  text-decoration: none;
+
+  &[aria-current="page"] {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
 `;
 
 export const GlobalStyle = createGlobalStyle`

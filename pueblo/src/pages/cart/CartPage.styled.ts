@@ -3,31 +3,50 @@ import styled from "styled-components";
 /* ---------- 컨테이너 ---------- */
 export const ContainerStyled = styled.div`
   margin: 0 auto;
-  max-width: 1120px;
-  padding: 0 ${({ theme }) => theme.spacing.md} 140px;
+  max-width: 1200px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 72px 20px 100px;
+  min-height: 65vh;
+
+  @media (max-width: 600px) {
+    padding: 32px 16px 64px;
+  }
+  font-size: 13px;
+  font-family: inherit;
+
+  button, input {
+    font: inherit;
+    box-sizing: border-box;
+  }
+
+  button { cursor: pointer; }
   background: ${({ theme }) => theme.colors.surface}; /* 배경 연한 회색 제거 → 흰색 */
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
 `;
 
 /* ---------- 상단 타이틀 & 탭 ---------- */
 export const HeaderStyled = styled.header`
-  padding: ${({ theme }) => theme.spacing.lg} 0 ${({ theme }) => theme.spacing.sm};
+  padding: 0 0 18px;
+  border-bottom: 1px solid #222;
   background: ${({ theme }) => theme.colors.surface};
 `;
 
 export const TitleStyled = styled.h1`
-  margin: 0 0 ${({ theme }) => theme.spacing.md};
-  font-size: 1.5rem;   /* 더 작게 */
-  font-weight: 600;    /* 덜 두껍게 */
-  letter-spacing: -0.02em;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
 `;
 
 export const TabsStyled = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  max-width: 320px;
+  margin: 0 auto;
   align-items: end;
   position: relative;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border}; /* 옅은 경계 */
+  border-bottom: 1px solid #eee; /* 옅은 경계 */
 `;
 
 /* 탭 아이템: 활성 시 텍스트 색만 진하게 */
@@ -38,69 +57,49 @@ export const TabItemStyled = styled.button<{ $active?: boolean }>`
   padding: ${({ theme }) => theme.spacing.sm} 0;
   cursor: pointer;
 
-  display: grid;
-  justify-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
 
   .count {
-    font-weight: 700;
-    font-size: ${({ theme }) => theme.fontSizes.md};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    font-weight: 400;
+    font-size: 12px;
+    color: #000;
   }
   .label {
-    font-size: ${({ theme }) => theme.fontSizes.sm};
+    font-size: 12px;
     color: ${({ theme, $active }) =>
       $active ? theme.colors.textPrimary : theme.colors.textSecondary};
   }
 `;
 
-/* 탭 하단 슬라이딩 하이라이터 (F!t Now 배송 ↔ 브랜드 배송) */
+/* 탭 하단 슬라이딩 하이라이터 (pueblo 배송 ↔ 브랜드 배송) */
 export const TabsIndicatorStyled = styled.div<{ $index: 0 | 1 }>`
   position: absolute;
   bottom: -1px;
   left: 0;
-  height: 2px;
+  height: 1px;
   width: 50%;
-  background: ${({ theme }) => theme.colors.textPrimary};
+  background: #000;
   transform: translateX(${({ $index }) => ($index === 0 ? "0%" : "100%")});
   transition: transform 200ms ease;
 `;
 
 /* ---------- 빈 장바구니 밴드 ---------- */
 export const EmptyBandStyled = styled.section`
-  margin-top: ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme }) => theme.colors.hover};
-  border-radius: ${({ theme }) => theme.radii.xl};
-  padding: 64px 0;
+  padding: 12px 16px 72px;
   text-align: center;
 
   .msg {
-    color: ${({ theme }) => theme.colors.textSecondary};
+    margin: 0 0 16px;
+    color: #888;
     line-height: 1.6;
-    margin-bottom: ${({ theme }) => theme.spacing.sm};
   }
-
   .cta {
-    display: inline-block;
-    padding: 10px 16px;
-    border: 1px solid ${({ theme }) => theme.colors.textPrimary};
-    border-radius: ${({ theme }) => theme.radii.xl};
-    background: ${({ theme }) => theme.colors.surface};
-    color: ${({ theme }) => theme.colors.textPrimary};
-    transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
-
-    &:hover {
-      background: ${({ theme }) => theme.colors.textPrimary};
-      color: ${({ theme }) => theme.colors.onPrimary};
-    }
-    &:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 3px ${({ theme }) => theme.focusRing};
-    }
-    &:active {
-      transform: translateY(0.5px);
-      opacity: 0.95;
-    }
+    color: #222;
+    font-weight: 600;
+    text-underline-offset: 3px;
   }
 `;
 
@@ -113,21 +112,22 @@ export const ListStyled = styled.section`
 
 export const ItemCardStyled = styled.div`
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 18px 80px minmax(0, 1fr);
+  align-items: start;
   gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border}; /* 옅은 경계 */
-  border-radius: ${({ theme }) => theme.radii.xl};
+  border: 1px solid #eee; /* 옅은 경계 */
+  border-radius: 0;
   background: ${({ theme }) => theme.colors.surface};
-  box-shadow: ${({ theme }) => theme.shadows.lg};
+  box-shadow: none;
 `;
 
 export const ThumbStyled = styled.img`
-  width: 96px;
+  width: 80px;
   height: 96px;
   object-fit: cover;
-  border-radius: ${({ theme }) => theme.radii.lg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 0;
+  border: 1px solid #eee;
 `;
 
 export const ItemMetaStyled = styled.div`
@@ -136,8 +136,8 @@ export const ItemMetaStyled = styled.div`
   min-width: 0;
 
   .brand {
-    color: ${({ theme }) => theme.colors.textSecondary};
-    font-size: ${({ theme }) => theme.fontSizes.sm};
+    color: #555;
+    font-size: 12px;
   }
   .name {
     margin-top: 2px;
@@ -148,17 +148,17 @@ export const ItemMetaStyled = styled.div`
   }
   .sub {
     margin-top: 2px;
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
   }
   .limited {
     display: inline-block;
     margin-top: 4px;
     padding: 2px 6px;
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    border-radius: ${({ theme }) => theme.radii.md};
-    font-size: ${({ theme }) => theme.fontSizes.xs || "0.8rem"};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    border: 1px solid #eee;
+    border-radius: 0;
+    font-size: 11px;
+    color: #555;
   }
 `;
 
@@ -176,16 +176,16 @@ export const QtyControlStyled = styled.div`
   button {
     width: 28px;
     height: 28px;
-    border-radius: ${({ theme }) => theme.radii.md};
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    background: ${({ theme }) => theme.colors.hover};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    border-radius: 0;
+    border: 1px solid #eee;
+    background: #fafafa;
+    color: #000;
   }
   .qty {
     width: 28px;
     text-align: center;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
   }
 `;
 
@@ -193,12 +193,12 @@ export const PriceBoxStyled = styled.div`
   text-align: right;
   .price {
     font-weight: 700;
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
   }
   .fee {
     margin-top: 2px;
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
   }
 `;
 
@@ -213,8 +213,8 @@ export const CouponBoxStyled = styled.div`
   display: grid;
   gap: 10px;
   padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
+  border: 1px solid #eee;
+  border-radius: 0;
   background: ${({ theme }) => theme.colors.surface};
 
   .row {
@@ -223,24 +223,25 @@ export const CouponBoxStyled = styled.div`
   }
   input {
     flex: 1;
+    min-width: 0;
     height: 40px;
     padding: 0 ${({ theme }) => theme.spacing.sm};
-    border-radius: ${({ theme }) => theme.radii.md};
-    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: 0;
+    border: 1px solid #eee;
     background: ${({ theme }) => theme.colors.inputBg};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
   }
   button {
     height: 40px;
     padding: 0 ${({ theme }) => theme.spacing.sm};
-    border-radius: ${({ theme }) => theme.radii.md};
-    border: 1px solid ${({ theme }) => theme.colors.textPrimary};
+    border-radius: 0;
+    border: 1px solid #000;
     background: ${({ theme }) => theme.colors.surface};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
   }
   .hint {
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
   }
   .error {
     color: ${({ theme }) => theme.colors.danger};
@@ -251,8 +252,8 @@ export const ShippingBoxStyled = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.xs};
   padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
+  border: 1px solid #eee;
+  border-radius: 0;
   background: ${({ theme }) => theme.colors.surface};
 `;
 
@@ -261,47 +262,39 @@ export const RadioStyled = styled.label<{ $active?: boolean }>`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.lg};
+  border: 1px solid #eee;
+  border-radius: 0;
   background: ${({ $active, theme }) =>
     $active ? theme.colors.hover : theme.colors.surface};
   cursor: pointer;
 
   input {
-    accent-color: ${({ theme }) => theme.colors.primary};
+    accent-color: #000;
   }
   .desc {
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
   }
 `;
 
 export const SummaryCardStyled = styled.div`
   display: grid;
-  gap: ${({ theme }) => theme.spacing.xs};
-  padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
-  background: ${({ theme }) => theme.colors.surface};
-
-  .line {
+  gap: 22px;
+  .line, .total {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    color: ${({ theme }) => theme.colors.textSecondary};
+    align-items: center;
+    gap: 12px;
   }
   .total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: 800;
-    font-size: ${({ theme }) => theme.fontSizes.lg || "1.1rem"};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    font-size: 15px;
+    font-weight: 600;
   }
+  .total span:last-child { color: #ff3b30; }
   hr {
-    border: none;
-    height: 1px;
-    background: ${({ theme }) => theme.colors.border};
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #eee;
     margin: 6px 0;
   }
 `;
@@ -311,29 +304,29 @@ export const AgreeBoxStyled = styled.div`
   gap: ${({ theme }) => theme.spacing.xs};
   align-items: center;
   padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
+  border: 1px solid #eee;
+  border-radius: 0;
   background: ${({ theme }) => theme.colors.surface};
 
   input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: ${({ theme }) => theme.colors.primary};
+    accent-color: #000;
   }
   .text {
-    font-size: ${({ theme }) => theme.fontSizes.md};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 13px;
+    color: #555;
   }
   .link {
     background: transparent;
     border: none;
     padding: 0;
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
     text-decoration: underline;
     cursor: pointer;
   }  
   a {
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
     text-decoration: underline;
   }
 `;
@@ -345,35 +338,38 @@ export const StickyBarStyled = styled.div`
   right: 0;
   bottom: 0;
   z-index: 30;
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  border-top: 1px solid #eee;
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.surface};
 
   .inner {
-    max-width: 1120px;
+    max-width: 1160px;
     margin: 0 auto;
     display: flex;
+    flex-wrap: wrap;
+
+    .info { margin-right: auto; }
     gap: ${({ theme }) => theme.spacing.xs};
     align-items: center;
   }
   .info .label {
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
   }
   .info .value {
     font-weight: 700;
-    font-size: ${({ theme }) => theme.fontSizes.lg || "1.1rem"};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    font-size: 15px;
+    color: #000;
   }
   button {
-    border-radius: ${({ theme }) => theme.radii.xl};
+    border-radius: 0;
     padding: 10px 16px;
-    border: 1px solid ${({ theme }) => theme.colors.textPrimary};
+    border: 1px solid #000;
     background: ${({ theme }) => theme.colors.surface};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
   }
   .primary {
-    background: ${({ theme }) => theme.colors.textPrimary};
+    background: #000;
     color: ${({ theme }) => theme.colors.onPrimary};
     border: none;
   }
@@ -386,10 +382,10 @@ export const StickyBarStyled = styled.div`
 /* ---------- 버튼/인풋/체크박스 ---------- */
 export const ButtonStyled = styled.button`
   padding: 10px 14px;
-  border-radius: ${({ theme }) => theme.radii.lg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.hover};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  border-radius: 0;
+  border: 1px solid #eee;
+  background: #fafafa;
+  color: #000;
 
   &:focus-visible {
     outline: none;
@@ -400,10 +396,10 @@ export const ButtonStyled = styled.button`
 export const InputStyled = styled.input`
   height: 40px;
   padding: 0 ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 0;
+  border: 1px solid #eee;
   background: ${({ theme }) => theme.colors.inputBg};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
 
   &:focus-visible {
     outline: none;
@@ -411,7 +407,13 @@ export const InputStyled = styled.input`
   }
 `;
 
-export const CheckboxStyled = styled.input.attrs({ type: "checkbox" })``;
+export const CheckboxStyled = styled.input.attrs({ type: "checkbox" })`
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: #111;
+`;
 
 /* ---------- 추천 상품 섹션 ---------- */
 export const RecoSectionStyled = styled.section`
@@ -426,40 +428,30 @@ export const RecoHeaderStyled = styled.div`
 
   h2 {
     margin: 0;
-    font-size: ${({ theme }) => theme.fontSizes.lg || "1.1rem"};
+    font-size: 15px;
     font-weight: 700;
   }
   button {
     border: none;
     background: transparent;
-    color: ${({ theme }) => theme.colors.textSecondary};
-    font-size: ${({ theme }) => theme.fontSizes.sm};
+    color: #555;
+    font-size: 12px;
     cursor: pointer;
   }
 `;
 
 export const RecoGridStyled = styled.div`
   display: grid;
-  gap: ${({ theme }) => theme.spacing.sm};
-  grid-template-columns: repeat(2, 1fr);
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  @media (min-width: 1280px) {
-    grid-template-columns: repeat(5, 1fr);
-  }
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
 `;
 
 export const RecoThumbWrapStyled = styled.div`
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: ${({ theme }) => theme.radii.lg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 0;
+  border: 1px solid #eee;
 
   img {
     transition: transform 250ms ease;
@@ -474,44 +466,22 @@ export const RecoThumbStyled = styled.img`
 `;
 
 export const RecoCardStyled = styled.div`
-  position: relative;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
-  padding: ${({ theme }) => theme.spacing.sm};
+  min-width: 0;
+  background: #fff;
   display: grid;
-  gap: ${({ theme }) => theme.spacing.xs};
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    border-color 160ms ease,
-    background-color 160ms ease;
-  will-change: transform;
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      transform: translateY(-2px);
-      border-color: ${({ theme }) => theme.colors.textPrimary};
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-    &:hover ${/* sc-selector */ RecoThumbWrapStyled} img {
-      transform: scale(1.03);
-    }
-  }
-
-  &:focus-within {
-    border-color: ${({ theme }) => theme.colors.textPrimary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.focusRing};
-  }
+  align-content: start;
+  gap: 12px;
 `;
 
 export const RecoMetaStyled = styled.div`
   .brand {
-    font-size: ${({ theme }) => theme.fontSizes.sm};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 12px;
+    color: #555;
   }
   .name {
-    font-weight: 600;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -527,16 +497,16 @@ export const RecoPriceRowStyled = styled.div`
     font-weight: 700;
   }
   .wish {
-    border: 1px solid ${({ theme }) => theme.colors.textPrimary};
-    border-radius: ${({ theme }) => theme.radii.xl};
+    border: 1px solid #000;
+    border-radius: 0;
     padding: 6px 12px;
     background: ${({ theme }) => theme.colors.surface};
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
     cursor: pointer;
     transition: background 120ms ease;
 
     &:hover {
-      background: ${({ theme }) => theme.colors.hover};
+      background: #fafafa;
     }
   }
 `;
@@ -544,18 +514,18 @@ export const RecoPriceRowStyled = styled.div`
 export const DividerStyled = styled.hr`
   border: none;
   height: 1px;
-  background: ${({ theme }) => theme.colors.border};
+  background: #eee;
   margin: ${({ theme }) => theme.spacing.xl} 0;
 `;
 
 /* ---------- 추가: BadgeStyled & EmptyStyled ---------- */
 export const BadgeStyled = styled.span`
   padding: 2px 8px;
-  border-radius: ${({ theme }) => theme.radii.pill};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.badgeBg};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  border-radius: 0;
+  border: 1px solid #eee;
+  background: #fafafa;
+  font-size: 12px;
+  color: #555;
   margin-left: ${({ theme }) => theme.spacing.xs};
 `;
 
@@ -565,17 +535,17 @@ export const EmptyStyled = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
   padding: 48px ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
+  border: 1px solid #eee;
+  border-radius: 0;
   text-align: center;
 
   .title {
     font-weight: 700;
-    color: ${({ theme }) => theme.colors.textPrimary};
+    color: #000;
   }
   .desc {
-    font-size: ${({ theme }) => theme.fontSizes.md};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 13px;
+    color: #555;
   }
 `;
 
@@ -595,9 +565,9 @@ export const ModalContentStyled = styled.div`
   display: grid;
   grid-template-rows: auto 1fr auto;
   background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.xl};
+  color: #000;
+  border: 1px solid #eee;
+  border-radius: 0;
   box-shadow: 0 20px 60px rgba(0,0,0,0.2);
   overflow: hidden;
 `;
@@ -607,11 +577,11 @@ export const ModalHeaderStyled = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid #eee;
 
   h3 {
     margin: 0;
-    font-size: ${({ theme }) => theme.fontSizes.lg || "1.1rem"};
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: -0.01em;
   }
@@ -623,12 +593,12 @@ export const ModalBodyStyled = styled.div`
 
   h4 {
     margin: 0 0 ${({ theme }) => theme.spacing.xs};
-    font-size: ${({ theme }) => theme.fontSizes.md};
+    font-size: 13px;
     font-weight: 600;
   }
   p, li {
-    font-size: ${({ theme }) => theme.fontSizes.md};
-    color: ${({ theme }) => theme.colors.textSecondary};
+    font-size: 13px;
+    color: #555;
     line-height: 1.6;
   }
   ul {
@@ -642,20 +612,20 @@ export const ModalFooterStyled = styled.div`
   justify-content: flex-end;
   gap: ${({ theme }) => theme.spacing.xs};
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  border-top: 1px solid #eee;
   background: ${({ theme }) => theme.colors.surface};
 `;
 
 export const ModalCloseButtonStyled = styled.button`
   padding: 10px 14px;
-  border-radius: ${({ theme }) => theme.radii.lg};
-  border: 1px solid ${({ theme }) => theme.colors.textPrimary};
+  border-radius: 0;
+  border: 1px solid #000;
   background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  color: #000;
   cursor: pointer;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.hover};
+    background: #fafafa;
   }
   &:focus-visible {
     outline: none;
@@ -663,3 +633,71 @@ export const ModalCloseButtonStyled = styled.button`
   }
 `;
 
+
+export const CartLayoutStyled = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 29%);
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 600px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+`;
+
+export const CartContentStyled = styled.div`
+  min-width: 0;
+`;
+
+export const SelectionBarStyled = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  gap: 12px;
+
+  label { display: flex; align-items: center; gap: 12px; }
+  button { border: 0; padding: 0; background: none; color: #444; }
+  button:disabled { color: #888; cursor: default; }
+`;
+
+export const OrderPanelStyled = styled.aside`
+  box-sizing: border-box;
+  padding: 24px 20px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  position: sticky;
+  top: 24px;
+  min-width: 0;
+
+  h2 { margin: 0 0 28px; font-size: 15px; font-weight: 600; }
+  .continue {
+    display: block;
+    margin-top: 14px;
+    color: #222;
+    text-align: center;
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+  ${AgreeBoxStyled} {
+    border: 0;
+    padding: 20px 0 0;
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  @media (max-width: 600px) { position: static; }
+`;
+
+export const CheckoutButtonStyled = styled.button`
+  width: 100%;
+  min-height: 44px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 5px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  &:disabled { background: #8c8c8c; cursor: not-allowed; }
+`;
