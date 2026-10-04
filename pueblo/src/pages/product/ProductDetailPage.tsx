@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { captureHandledError } from "../../monitoring/errors";
 import { Link, useParams } from "react-router-dom";
 import { Bookmark, Heart, Share2, ChevronUp, ChevronDown } from "lucide-react";
 import { catalogProducts } from "./catalog";
@@ -46,7 +47,8 @@ function ProductDetailContent({ product }: { product: CatalogProduct }) {
         condition: "새상품",
       });
       setMessage(added ? "장바구니에 담았습니다." : "같은 상품은 최대 9개까지 담을 수 있습니다.");
-    } catch {
+    } catch (error) {
+      captureHandledError(error, { feature: "cart", action: "add" });
       setMessage("장바구니에 담지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
     }
   };
@@ -86,7 +88,8 @@ function ProductDetailContent({ product }: { product: CatalogProduct }) {
                   try {
                     setFavorite(product.id, !wish);
                     setWishMessage(wish ? "관심목록에서 삭제했습니다." : "관심목록에 저장했습니다.");
-                  } catch {
+                  } catch (error) {
+                    captureHandledError(error, { feature: "favorites", action: "save" });
                     setWishMessage("관심목록을 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
                   }
                 }}>

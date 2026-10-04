@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { captureHandledError } from "../../monitoring/errors";
 import { Link } from "react-router-dom";
 import { Heart, Trash2 } from "lucide-react";
 import { catalogProducts } from "../product/catalog";
@@ -14,7 +15,8 @@ export default function FavoritesPage() {
     try {
       setFavorite(id, false);
       setMessage("관심목록에서 삭제했습니다.");
-    } catch {
+    } catch (error) {
+      captureHandledError(error, { feature: "favorites", action: "remove" });
       setMessage("관심목록을 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
     }
   };

@@ -1,5 +1,6 @@
 // 1) React / 라이브러리
 import React, { useEffect, useMemo, useReducer, useState } from "react";
+import { captureHandledError } from "../../monitoring/errors";
 import { Link, useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import { readCart, saveCart, type CartItem } from "./cartStorage";
@@ -187,7 +188,8 @@ useEffect(() => {
   useEffect(() => {
     try {
       saveCart(state);
-    } catch {
+    } catch (error) {
+      captureHandledError(error, { feature: "cart", action: "save" });
       setToast("장바구니를 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
     }
   }, [state]);

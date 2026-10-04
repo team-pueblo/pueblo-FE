@@ -1,0 +1,3 @@
+CanceledError: canceled
+*POST /api/login request failed (NETWORK)
+*POST /api/login request failed (TIMEOUT)

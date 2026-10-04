@@ -21,7 +21,16 @@ if (enabled) {
 
 // Leave React's default development error handling intact when disabled.
 export const sentryRootOptions = enabled ? {
-  onUncaughtError: Sentry.reactErrorHandler(),
-  onCaughtError: Sentry.reactErrorHandler(),
-  onRecoverableError: Sentry.reactErrorHandler(),
+  onUncaughtError: rootErrorHandler("fatal"),
+  onCaughtError: rootErrorHandler("error"),
+  onRecoverableError: rootErrorHandler("warning"),
 } : {};
+
+function rootErrorHandler(level: "fatal" | "error" | "warning") {
+  const handler = Sentry.reactErrorHandler();
+  return (...args: Parameters<typeof handler>) => Sentry.withScope((scope) => {
+    scope.setLevel(level);
+    scope.setTag("feature", "react");
+    handler(...args);
+  });
+}
