@@ -1,6 +1,8 @@
 // 1) React / 라이브러리
 import React, { useEffect, useState } from "react";
-import * as Sentry from "@sentry/react";
+import { captureHandledError } from "../../monitoring/errors";
+import axios from "axios";
+import { api } from "../../api/client";
 import { useNavigate } from "react-router-dom";
 
 // 2) 절대경로 import
@@ -153,19 +155,13 @@ const LoginPage: React.FC = () => {
       setLoading(true);
       persist(email, remember);
 
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const { data } = await api.post<LoginResponse>("/login", { email, password }, {
+        monitoring: { endpoint: "/api/login", feature: "auth", action: "login",
+          critical: true },
       });
+      if (!data || typeof data !== "object") throw new Error("Invalid login response");
 
-      if (response.status >= 500) {
-        throw new Error(`Login server error (HTTP ${response.status})`);
-      }
-
-      const data: LoginResponse = await response.json();
-
-      if (response.ok && "token" in data) {
+      if ("token" in data && typeof data.token === "string" && data.user && typeof data.user === "object") {
         localStorage.setItem("token", data.token);
         localStorage.setItem(
           "user",
@@ -174,14 +170,18 @@ const LoginPage: React.FC = () => {
         checkTokenExpiration();
         alert("로그인 성공!");
         navigate("/");
+      } else if ("message" in data && typeof data.message === "string") {
+        setError(data.message || "로그인에 실패했습니다.");
       } else {
-        setError(("message" in data && data.message) || "로그인에 실패했습니다.");
+        throw new Error("Invalid login response");
       }
     } catch (err) {
-      Sentry.captureException(err, { tags: { feature: "auth", action: "login" } });
-      const msg = err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.";
-      console.error("로그인 오류:", err);
-      setError("서버와의 통신 중 오류가 발생했습니다. " + msg);
+      captureHandledError(err, { feature: "auth", action: "login" });
+      if (axios.isAxiosError(err) && [400, 401].includes(err.response?.status ?? 0)) {
+        setError("이메일 또는 비밀번호를 확인해주세요.");
+      } else {
+        setError("로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      }
     } finally {
       setLoading(false);
     }
