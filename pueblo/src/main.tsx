@@ -18,6 +18,7 @@ import { CartPage } from "./pages/cart/CartPage";
 import ProductDetailPage from "./pages/product/ProductDetailPage";
 import FavoritesPage from "./pages/favorites/FavoritesPage";
 import SearchPage from "./pages/search/SearchPage";
+import LegalPage from "./pages/legal/LegalPage";
 import "./index.css";
 import { sentryRootOptions } from "./monitoring";
 
@@ -27,6 +28,8 @@ ReactDOM.createRoot(document.getElementById("root")!, sentryRootOptions).render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
+          <Route path="/terms" element={<LegalPage kind="terms" />} />
+          <Route path="/privacy" element={<LegalPage kind="privacy" />} />
           <Route path="/" element={<App />}>
             <Route index element={<MainPage />} />
             <Route path="favorites" element={<FavoritesPage />} />

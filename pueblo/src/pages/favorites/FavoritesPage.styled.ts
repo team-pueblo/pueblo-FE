@@ -1,10 +1,11 @@
+import { catalogPageTypography } from "../../theme/catalogPage";
 import styled from "styled-components";
 
 export const Page = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 56px 20px 80px;
-  font-size: 13px;
+  ${catalogPageTypography}
   color: #222;
   @media (max-width: 768px) { padding: 32px 16px 56px; }
 `;
@@ -16,14 +17,14 @@ export const Heading = styled.div`
   gap: 12px;
   border-bottom: 1px solid #222;
   padding-bottom: 20px;
-  h1 { font-size: 18px; font-weight: 400; margin: 0; }
-  span { font-size: 12px; color: #777; }
+  h1 { font-size: var(--catalog-title); font-weight: 400; margin: 0; }
+  span { font-size: var(--catalog-caption); color: #777; }
 `;
 
 export const Message = styled.p`
   min-height: 20px;
   margin: 12px 0;
-  font-size: 12px;
+  font-size: var(--catalog-caption);
   color: #666;
   overflow-wrap: anywhere;
 `;
@@ -43,7 +44,7 @@ export const RemoveButton = styled.button`
   background: none;
   color: #888;
   font: inherit;
-  font-size: 12px;
+  font-size: var(--catalog-caption);
   cursor: pointer;
   &:hover { color: #222; }
   &:focus-visible { outline: 1px solid #222; outline-offset: 3px; }
@@ -55,7 +56,7 @@ export const EmptyState = styled.div`
   line-height: 1.6;
   > svg { color: #888; }
   p { margin: 20px 0 8px; }
-  span { display: block; color: #777; font-size: 12px; }
+  span { display: block; color: #777; font-size: var(--catalog-caption); }
   a { display: inline-flex; align-items: center; box-sizing: border-box; min-height: 34px; margin-top: 24px; padding: 0 16px; border: 1px solid #ddd; color: inherit; text-decoration: none; }
   @media (max-width: 768px) { a { min-height: 44px; } }
 `;

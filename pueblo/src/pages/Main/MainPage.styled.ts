@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 export const MainPageContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   @media (max-width: 768px) {
@@ -15,8 +14,8 @@ export const MainPageContainer = styled.div`
 
 export const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px clamp(20px, 1.4vw, 28px);
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px 12px;
@@ -54,7 +53,7 @@ export const ProductInfo = styled.div`
 
 export const ProductTag = styled.span`
   color: #ff4a4a;
-  font-size: 13px;
+  font-size: clamp(13px, 0.95vw, 19px);
   font-weight: 500;
   @media (max-width: 768px) {
     font-size: 12px;
@@ -63,7 +62,7 @@ export const ProductTag = styled.span`
 `;
 
 export const ProductBrand = styled.p`
-  font-size: 14px;
+  font-size: clamp(14px, 1vw, 20px);
   font-weight: bold;
   margin: 0;
   @media (max-width: 768px) {
@@ -73,7 +72,7 @@ export const ProductBrand = styled.p`
 `;
 
 export const ProductName = styled.p`
-  font-size: 14px;
+  font-size: clamp(14px, 1vw, 20px);
   color: #333;
   margin: 0;
   @media (max-width: 768px) {
@@ -85,7 +84,7 @@ export const ProductName = styled.p`
 `;
 
 export const ProductPrice = styled.p`
-  font-size: 15px;
+  font-size: clamp(15px, 1.05vw, 21px);
   font-weight: 500;
   margin: 0;
   @media (max-width: 768px) {
