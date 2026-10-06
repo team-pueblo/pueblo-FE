@@ -1,3 +1,4 @@
+import { catalogPageTypography } from "../../theme/catalogPage";
 import styled from "styled-components";
 
 export const Page = styled.div`
@@ -5,7 +6,7 @@ export const Page = styled.div`
   width: 100%;
   padding: 56px 20px 80px;
   color: #222;
-  font-size: 13px;
+  ${catalogPageTypography}
   button, input { font-family: inherit; }
   button { cursor: pointer; }
   button:focus-visible { outline: 2px solid #222; outline-offset: 3px; }
@@ -13,18 +14,18 @@ export const Page = styled.div`
 `;
 
 export const SearchArea = styled.div`
-  max-width: 520px;
+  max-width: 720px;
   margin: 0 auto 40px;
 `;
 
 export const Title = styled.h1`
-  font-size: 18px;
+  font-size: var(--catalog-title);
   font-weight: 400;
   margin: 0 0 24px;
 `;
 
 export const SearchForm = styled.form`
-  label { display: block; font-size: 12px; margin-bottom: 8px; }
+  label { display: block; font-size: var(--catalog-caption); margin-bottom: 8px; }
   .input-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 44px;
@@ -35,13 +36,14 @@ export const SearchForm = styled.form`
     box-sizing: border-box;
     min-width: 0;
     width: 100%;
-    height: 48px;
+    height: 60px;
     padding: 0 8px 0 0;
     border: 0;
     border-radius: 0;
     background: #fff;
     color: #222;
-    font-size: 16px;
+    font-size: var(--catalog-input);
+    @media (max-width: 768px) { height: 48px; }
     outline: none;
   }
   button { display: grid; place-items: center; border: 0; background: #fff; color: #222; }
@@ -54,8 +56,8 @@ export const Examples = styled.div`
   gap: 0 12px;
   margin-top: 8px;
   color: #777;
-  font-size: 12px;
-  button { min-height: 44px; padding: 0 4px; background: none; border: 0; color: #555; font-size: 12px; }
+  font-size: var(--catalog-caption);
+  button { min-height: 44px; padding: 0 4px; background: none; border: 0; color: #555; font-size: var(--catalog-caption); }
 `;
 
 export const ResultHeader = styled.div`
@@ -68,7 +70,7 @@ export const ResultHeader = styled.div`
   border-bottom: 1px solid #eee;
   p { min-width: 0; margin: 0; overflow-wrap: anywhere; line-height: 1.6; }
   strong { margin-left: 8px; font-weight: 500; }
-  button { flex-shrink: 0; min-height: 44px; padding: 0; border: 0; background: none; color: #666; font-size: 12px; }
+  button { flex-shrink: 0; min-height: 44px; padding: 0; border: 0; background: none; color: #666; font-size: var(--catalog-caption); }
 `;
 
 export const EmptyState = styled.div`
@@ -76,6 +78,6 @@ export const EmptyState = styled.div`
   text-align: center;
   line-height: 1.6;
   p { margin: 0 0 8px; }
-  span { display: block; font-size: 12px; color: #777; }
+  span { display: block; font-size: var(--catalog-caption); color: #777; }
   button { display: block; min-height: 44px; margin: 24px auto 0; padding: 0 20px; border: 1px solid #ddd; background: #fff; color: #222; }
 `;

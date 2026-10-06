@@ -68,7 +68,7 @@ export const LeftNav = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.95vw;
+  font-size: clamp(13px, 0.95vw, 18px);
   align-items: center;
   @media (max-width: 768px) {
     left: 16px;
@@ -89,7 +89,7 @@ export const RightNav = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.95vw;
+  font-size: clamp(13px, 0.95vw, 18px);
   align-items: center;
   @media (max-width: 768px) {
     right: 16px;
@@ -129,7 +129,7 @@ export const CategoryMenu = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 0.9vw;
+  font-size: clamp(13px, 0.9vw, 18px);
   @media (max-width: 768px) {
     justify-content: space-between;
     gap: 12px;

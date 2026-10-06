@@ -4,9 +4,7 @@ export const MainHeaderContainer = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* 메인 컨텐츠(max-width: 1200px)와 시각적 기준을 맞춰줌 */
   width: 100%;
-  max-width: 1200px; /* App의 ContentWrap과 동일 */
   margin: 0 auto;
 
   padding: 0 2vw 2vh 2vw;
@@ -63,7 +61,7 @@ export const SubNavContainer = styled.div`
 `;
 
 export const BrandTitle = styled.p`
-  font-size: 1.4vw;
+  font-size: clamp(22px, 1.4vw, 28px);
   margin: 0;
 
   display: flex;
@@ -94,7 +92,7 @@ export const CategoryContainer = styled.div`
 `;
 
 export const CategoryLink = styled.a<{ $isActive?: boolean }>`
-  font-size: 0.85vw;
+  font-size: clamp(13px, 0.85vw, 17px);
   color: #555;
   text-decoration: none;
   padding-bottom: 0.5vh;
