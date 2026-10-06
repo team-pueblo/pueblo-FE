@@ -1,14 +1,19 @@
 import React from "react";
 import * as S from "./MainPage.styled";
-import MainHeader from "./MainHeader";
-import ProductListing from "./ProductListing";
+import PromotionBanner from "./home/PromotionBanner";
+import CategoryShortcuts from "./home/CategoryShortcuts";
+import FeaturedProducts from "./home/FeaturedProducts";
+import { Home } from "./home/Home.styled";
 
 
 const MainPage: React.FC = () => {
   return (
     <S.MainPageContainer>
-      <MainHeader />
-      <ProductListing />
+      <Home>
+        <PromotionBanner />
+        <CategoryShortcuts />
+        <FeaturedProducts />
+      </Home>
     </S.MainPageContainer>
   );
 };
