@@ -1,7 +1,17 @@
 # Docker 배포용 빌드
 
-Docker는 Node 22와 pnpm 8.15.9로 프론트엔드를 빌드하고 정적 파일만 추출합니다.
-Nginx나 개발 서버를 실행하지 않습니다. 실행 가능한 컨테이너 이미지가 아닌 배포용 파일을 만드는 구성입니다.
+Docker는 Node 22와 pnpm 8.15.9로 난독화된 프론트엔드를 빌드하고 Nginx로 8080 포트에서 제공합니다.
+기본 최종 단계는 실행용 `runtime`이며, 정적 파일만 필요한 경우 `artifacts` 단계도 사용할 수 있습니다.
+
+## 실행용 이미지
+
+```sh
+docker build --target runtime -t pueblo-fe:local .
+docker run --rm -p 8080:8080 pueblo-fe:local
+```
+
+`http://localhost:8080`으로 접속합니다. `/product/1` 같은 SPA 경로는 index.html로 처리하고, `/assets/`의 없는 파일은 404로 반환합니다. `/healthz`는 Kubernetes 헬스체크용입니다. Nginx는 비루트 사용자로 실행됩니다.
+API `/api`는 Ingress/Gateway에서 백엔드로 연결해야 합니다. Nginx는 API 요청에 HTML을 반환하지 않고 404로 처리합니다.
 
 ## 산출물 생성
 
@@ -14,22 +24,16 @@ docker buildx build --target artifacts --output type=local,dest=./pueblo/dist .
 `pueblo/dist/index.html`, `pueblo/dist/assets/`, public의 이미지 등 정적 파일이 생성됩니다.
 기존 dist에 오래된 파일이 있다면 빈 출력 경로를 지정하여 빌드하세요. local exporter는 기존 파일을 정리하지 않습니다.
 
-## API 및 Sentry 설정
+## 빌드 설정과 난독화
 
-```sh
-docker buildx build --target artifacts \
-  --build-arg VITE_API_BASE_URL=https://api.example.com/api \
-  --build-arg VITE_SENTRY_DSN=https://PUBLIC_KEY@HOST/PROJECT_ID \
-  --build-arg VITE_SENTRY_ENVIRONMENT=production \
-  --build-arg VITE_SENTRY_RELEASE=COMMIT_SHA \
-  --output type=local,dest=./pueblo/dist .
-```
+Docker는 `pnpm run build:secure`로 JavaScript 난독화를 적용합니다. 일반 `pnpm run build`와 개발 서버에는 적용하지 않습니다.
+코드를 배포 파일로 출력하기 전에 변환하므로 파일 해시와 참조도 최종 결과에 맞춰 생성됩니다.
+소스맵은 공개하지 않습니다. 난독화는 비밀정보 암호화가 아니며, 현재 Sentry에는 난독화 전 소스맵을 업로드하지 않아 오류 분석이 어려워질 수 있습니다.
 
-예시 값을 실제 환경에 맞게 바꿉니다. API 주소가 없으면 현재 도메인의 `/api`를 사용하며,
-Sentry DSN이 없으면 오류 수집이 비활성화됩니다. `VITE_SENTRY_ENABLED`는 로컬 개발에서 강제로 수집할 때 쓰는 값으로 기본값은 `false`입니다.
-
-Vite 환경변수는 빌드 시 JavaScript에 포함됩니다. 변경하려면 다시 빌드해야 하며 서버 실행 시 환경변수를 주입해도 이미 빌드한 파일은 바뀌지 않습니다.
-`.env` 파일은 Docker 빌드 컨텍스트에서 제외합니다. 공개 가능한 API 주소·Sentry DSN만 전달하고 인증 토큰이나 Slack 웹훅은 넣지 마세요.
+이 Dockerfile은 `VITE_*` 빌드 인자를 받지 않으며 로컬 `.env`도 포함하지 않습니다.
+현재 기본 동작은 API `/api` 사용, Sentry DSN 미지정으로 브라우저 오류 수집 비활성화입니다.
+GitHub 저장소와 Sentry의 연동만으로 브라우저 SDK의 DSN이 설정되지는 않습니다.
+ConfigMap은 이미 빌드된 JavaScript의 환경변수를 바꾸지 않습니다.
 
 ## 배포 서버에 전달
 

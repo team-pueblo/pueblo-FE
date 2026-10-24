@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pueblo-fe-config
+  namespace: frontend
 data:
-  # Example runtime setting. The chosen server must support this variable.
-  PORT: "8080"
+  # Optional process timezone; VITE_* cannot be configured at runtime.
+  TZ: "UTC"

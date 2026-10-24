@@ -10,6 +10,7 @@ export const theme = {
       textSecondary: "#4b5563",
       border: "#d1d5db",
       danger: "#ef4444",
+      status: { error: "#ef4444" },
       focus: "#111827",
       hover: "#f3f4f6",
       // Backward-compat nested structure used by older styled components
@@ -67,6 +68,5 @@ export const theme = {
     colorsStatusAlias: undefined,
   } as const;
 
-  (theme as any).colors.status = { error: theme.colors.danger };
   
   export type AppTheme = typeof theme;
