@@ -12,6 +12,10 @@ export const Hero = styled.section`
   background: #000;
   color: #fff;
   aspect-ratio: 2.5 / 1;
+  @media (min-width: 769px) {
+    height: clamp(240px, 24vw, 380px);
+    aspect-ratio: auto;
+  }
   @media (max-width: 768px) { aspect-ratio: auto; height: 430px; border-radius: 12px; }
 `;
 
@@ -42,7 +46,7 @@ export const HeroCopy = styled.div`
   left: 10%;
   bottom: 17%;
   max-width: 48%;
-  h1 { margin: 0 0 12px; font-size: clamp(24px, 2.65vw, 44px); line-height: 1.3; font-weight: 700; white-space: pre-line; letter-spacing: -0.04em; }
+  h1 { margin: 0 0 12px; font-size: clamp(24px, 2.2vw, 36px); line-height: 1.3; font-weight: 700; white-space: pre-line; letter-spacing: -0.04em; }
   p { margin: 0; color: #c7c7c7; font-size: clamp(12px, 1.05vw, 16px); line-height: 1.6; }
   @media (max-width: 768px) {
     left: 24px;
