@@ -1,0 +1,17 @@
+**
+!pueblo/
+!pueblo/package.json
+!pueblo/pnpm-lock.yaml
+!pueblo/pnpm-workspace.yaml
+!pueblo/index.html
+!pueblo/tsconfig*.json
+!pueblo/vite.config.ts
+!pueblo/src/
+!pueblo/src/**
+!pueblo/public/
+!pueblo/public/**
+**/.DS_Store
+**/.env
+**/.env.*
+**/node_modules
+**/dist

@@ -84,5 +84,3 @@ sketch
 # Backup files
 **/*.backup.*
 **/*.back.*
-
-pnpm-lock.yaml
