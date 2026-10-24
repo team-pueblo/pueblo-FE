@@ -15,16 +15,27 @@ spec:
     spec:
       containers:
         - name: pueblo-fe
-          # Replace with a runnable web-server image containing dist.
-          # The root Dockerfile's artifacts stage is NOT a runnable image.
-          image: YOUR_REGISTRY/pueblo-fe:YOUR_TAG
+          # CI replaces this placeholder with the successfully published commit tag.
+          image: ghcr.io/team-pueblo/pueblo-fe:sha-REPLACE_WITH_CI_COMMIT
+          imagePullPolicy: IfNotPresent
           ports:
-            # Match this port to the actual server's listening port.
             - name: http
               containerPort: 8080
           envFrom:
             - configMapRef:
                 name: pueblo-fe-config
+                optional: true
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
           resources:
             requests:
               cpu: "250m"
@@ -37,6 +48,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pueblo-fe
+  namespace: frontend
 spec:
   type: ClusterIP
   selector:

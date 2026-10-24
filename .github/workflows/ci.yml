@@ -1,0 +1,138 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'k8s/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
+        with:
+          languages: javascript-typescript
+          build-mode: none
+          queries: security-extended
+      - uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
+
+  source-and-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TRIVY_IMAGE: aquasec/trivy:0.76.1@sha256:790fd66d1697395d8693d1acaa1ea702406a20f109b6fc7bac8db623eca6c06c
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Secret scan
+        run: >-
+          docker run --rm --cap-drop ALL --security-opt no-new-privileges
+          -v "$PWD:/src:ro" "$TRIVY_IMAGE" fs /src --scanners secret
+          --skip-dirs /src/.git --exit-code 1 --no-progress
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Install locked dependencies
+        working-directory: pueblo
+        run: |
+          npm install --global pnpm@8.15.9
+          pnpm install --frozen-lockfile
+      - name: Lint, tests and obfuscated build
+        working-directory: pueblo
+        run: |
+          pnpm run lint
+          pnpm test
+          pnpm run build:secure
+      # Scan the lockfile: a static JS-only image has no npm package inventory.
+      - name: Dependency vulnerabilities
+        run: >-
+          docker run --rm --cap-drop ALL --security-opt no-new-privileges
+          -v "$PWD:/src:ro" "$TRIVY_IMAGE" fs /src/pueblo --scanners vuln
+          --pkg-types library --severity HIGH,CRITICAL --exit-code 1 --no-progress
+          --skip-dirs /src/pueblo/node_modules --skip-dirs /src/pueblo/dist
+
+  container-images:
+    needs: [codeql, source-and-dependencies]
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TRIVY_IMAGE: aquasec/trivy:0.76.1@sha256:790fd66d1697395d8693d1acaa1ea702406a20f109b6fc7bac8db623eca6c06c
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build and export obfuscated Nginx image without publishing
+        run: |
+          docker build --target runtime -t ghcr.io/team-pueblo/pueblo-fe:scan .
+          docker save ghcr.io/team-pueblo/pueblo-fe:scan -o "$RUNNER_TEMP/image.tar"
+          chmod 0644 "$RUNNER_TEMP/image.tar"
+      - name: Verify Nginx and SPA routing
+        run: bash .github/scripts/smoke-image.sh
+      - name: Image vulnerabilities and embedded secrets
+        run: >-
+          docker run --rm --cap-drop ALL --security-opt no-new-privileges
+          -v "$RUNNER_TEMP/image.tar:/image.tar:ro" "$TRIVY_IMAGE" image
+          --input /image.tar --scanners vuln,secret --severity HIGH,CRITICAL
+          --exit-code 1 --no-progress
+      - name: Publish commit and latest tags to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+        run: |
+          echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GHCR_USER" --password-stdin
+          docker tag ghcr.io/team-pueblo/pueblo-fe:scan "ghcr.io/team-pueblo/pueblo-fe:sha-${GITHUB_SHA}"
+          docker tag ghcr.io/team-pueblo/pueblo-fe:scan ghcr.io/team-pueblo/pueblo-fe:latest
+          docker push "ghcr.io/team-pueblo/pueblo-fe:sha-${GITHUB_SHA}"
+          docker push ghcr.io/team-pueblo/pueblo-fe:latest
+      - name: Log out of GHCR
+        if: always()
+        run: docker logout ghcr.io
+
+  update-deployment:
+    needs: container-images
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Record the published image tag for Argo CD
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth setup-git
+          branch_head=$(git ls-remote origin "refs/heads/${GITHUB_REF_NAME}" | cut -f1)
+          if [ "$branch_head" != "$GITHUB_SHA" ]; then
+            echo "Branch has advanced; a newer workflow will update the manifest."
+            exit 0
+          fi
+          python3 .github/scripts/update-deployment.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add k8s/deployment.yml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore: deploy frontend sha-${GITHUB_SHA}"
+          git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"

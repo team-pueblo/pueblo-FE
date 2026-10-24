@@ -1,4 +1,6 @@
 **
+!docker/
+!docker/nginx.conf
 !pueblo/
 !pueblo/package.json
 !pueblo/pnpm-lock.yaml
