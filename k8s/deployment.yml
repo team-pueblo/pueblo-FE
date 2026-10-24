@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pueblo-fe
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pueblo-fe
+  template:
+    metadata:
+      labels:
+        app: pueblo-fe
+    spec:
+      containers:
+        - name: pueblo-fe
+          # Replace with a runnable web-server image containing dist.
+          # The root Dockerfile's artifacts stage is NOT a runnable image.
+          image: YOUR_REGISTRY/pueblo-fe:YOUR_TAG
+          ports:
+            # Match this port to the actual server's listening port.
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: pueblo-fe-config
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pueblo-fe
+spec:
+  type: ClusterIP
+  selector:
+    app: pueblo-fe
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
