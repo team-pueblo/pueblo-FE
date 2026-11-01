@@ -96,14 +96,19 @@ export async function paymentStatus(orderId: string) {
 }
 export function message(error: unknown) {
   if (axios.isAxiosError(error)) {
+    if (!error.response) return error.code === "ECONNABORTED" || error.code === "ETIMEDOUT"
+      ? "서버 응답 시간이 초과되었습니다. 주문 생성 여부를 확인한 뒤 다시 조회해주세요."
+      : "서버 응답을 받지 못했습니다. API 서버 연결 또는 브라우저 CORS 설정을 확인해주세요.";
+    const code = error.response.data?.error?.code ?? error.response.data?.code;
+    const label = typeof code === "string" && /^[A-Z0-9_]{1,80}$/.test(code) ? ` (${code})` : "";
     if (error.response?.status === 401) return "로그인이 만료되었습니다. 다시 로그인해주세요.";
     if (error.response?.status === 403) return "본인 주문에 대한 권한을 확인해주세요.";
+    if (error.response.status === 404) return `요청한 주문 또는 결제 내역을 찾을 수 없습니다${label}. 현재 로그인한 계정의 주문 번호인지 확인해주세요.`;
+    if (error.response.status === 409) return `현재 주문 상태와 요청이 충돌합니다${label}. 기존 주문 상태를 다시 확인해주세요.`;
     if (error.response?.status === 400) {
-      const code = error.response.data?.error?.code ?? error.response.data?.code;
-      const label = typeof code === "string" && /^[A-Z0-9_]{1,80}$/.test(code) ? ` (${code})` : "";
       return `주문 요청이 거절되었습니다${label}. 연락처·우편번호와 견적 유효기간을 확인해주세요.`;
     }
-    return "서버 요청을 완료하지 못했습니다. 연결 상태와 주문 내역을 확인해주세요.";
+    return `서버 요청에 실패했습니다 (HTTP ${error.response.status})${label}. 잠시 후 주문 내역을 다시 확인해주세요.`;
   }
   return error instanceof Error ? error.message : "요청 처리 중 오류가 발생했습니다.";
 }
