@@ -418,7 +418,6 @@ useEffect(() => {
               } catch { setToast("결제 정보를 저장하지 못했습니다. 브라우저 저장 설정을 확인해주세요."); }
             }}
           >
-            <img src="/images/toss-pay.svg" alt="토스페이" />
             결제하기
           </CheckoutButtonStyled>
           <Link className="continue" to="/">계속 쇼핑하기</Link>
