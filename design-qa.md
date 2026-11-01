@@ -20,3 +20,6 @@
 - 전체 실결제 흐름의 시각 QA는 위 통합 검증 전까지 완료로 판정하지 않음.
 
 final result: blocked
+
+## 2026-11-01 주문서 스타일 후속 수정
+사용자 요청으로 기존 pueblo 페이지 톤을 우선 적용: 흰 배경, 기본 글꼴 13px, 제목 20px, 입력 38px, 버튼 40px, 직각 테두리 및 선 구분, 일반 흐름의 CTA로 변경. /tmp/pueblo-order-desktop.png 및 /tmp/pueblo-order-mobile.png를 재촬영했고 1440px·390px에서 overflow 없음. 빌드·린트 통과. 앞선 최종 실결제 통합 검증 제한은 유지.

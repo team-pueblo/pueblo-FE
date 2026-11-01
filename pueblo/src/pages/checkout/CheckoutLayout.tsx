@@ -2,17 +2,18 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getProduct } from "../product/catalogApi";
 export const CheckoutLayout = styled.div`
- background:#f5f5f7; padding:32px 20px 130px; min-height:65vh; color:#222;
- > main {max-width:760px;margin:auto;} h1{text-align:center;font-size:24px;margin:0 0 36px;} h2{font-size:18px;margin:28px 4px 14px;}
- .card{background:white;border-radius:16px;padding:24px;margin-bottom:16px;}
- .fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;} label{display:block;font-size:13px;} input:not([type=checkbox]){width:100%;box-sizing:border-box;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top:8px;font:inherit;}
- .wide{grid-column:1/-1;} .muted{color:#888;font-size:13px;line-height:1.6;} .notice{font-size:14px;line-height:1.7;color:#a33;}
+ background:#fff; padding:40px 20px 64px; min-height:65vh; color:#222; font-family:inherit; font-size:13px;
+ > main {max-width:640px;margin:auto;} h1{text-align:left;font-size:20px;font-weight:500;margin:0 0 28px;} h2{font-size:14px;font-weight:600;margin:24px 0 12px;}
+ .card{background:#fff;border-top:1px solid #e5e5e5;padding:16px 0;margin-bottom:16px;}
+ .fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;} label{display:block;font-size:12px;} input:not([type=checkbox]){width:100%;height:38px;box-sizing:border-box;padding:0 10px;border:1px solid #ddd;border-radius:0;margin-top:6px;font:inherit;font-size:13px;background:#fff;color:#222;} input:focus-visible{outline:1px solid #222;outline-offset:1px;}
+ .wide{grid-column:1/-1;} .muted{color:#888;font-size:12px;line-height:1.6;} .notice{font-size:13px;line-height:1.7;color:#a33;}
  button{cursor:pointer;font:inherit;} button:disabled{opacity:.45;cursor:default;}
- .primary{border:0;background:#111;color:white;border-radius:10px;padding:17px 24px;font-weight:600;width:100%;}
- .bottom{position:sticky;bottom:0;background:white;padding:16px;border-top:1px solid #eee;z-index:5;}
- .product{display:flex;gap:20px;align-items:center;padding:16px 0;border-bottom:1px solid #f1f1f1;} .product:last-child{border:0;} .product img{width:80px;height:95px;object-fit:contain;background:#f6f6f6;border-radius:8px;} .product p{margin:5px 0;font-size:14px;} .product strong{display:block;margin-top:10px;}
- details{margin-top:28px;font-size:13px;} summary{cursor:pointer;padding:12px 0;}
- @media(max-width:600px){padding:24px 16px 70px;h1{font-size:20px;margin-bottom:24px;}.card{padding:18px;}.fields{grid-template-columns:1fr;}.wide{grid-column:auto;}.product{gap:12px;}}
+ .primary{border:1px solid #111;background:#111;color:white;border-radius:0;min-height:40px;padding:10px 16px;font-size:13px;font-weight:500;width:100%;}
+ .bottom{background:white;padding:16px 0;border-top:1px solid #eee;}
+ .product{display:flex;gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid #f1f1f1;} .product:last-child{border:0;} .product img{width:72px;height:86px;object-fit:contain;background:#fff;} .product p{margin:4px 0;font-size:13px;} .product strong{display:block;margin-top:8px;font-size:13px;}
+ details{margin-top:20px;font-size:12px;} summary{cursor:pointer;padding:12px 0;}
+ @media(max-width:600px){padding:28px 16px 40px;h1{font-size:18px;margin-bottom:24px;}.fields{grid-template-columns:1fr;}.wide{grid-column:auto;}.product{gap:12px;}}
+
 `;
 export function OrderProducts() {
  const [rows,setRows]=useState<{id:string;name:string;image?:string;option:string;quantity:number;price:number}[]>([]);const [error,setError]=useState(false);
