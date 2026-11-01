@@ -98,6 +98,13 @@ export async function paymentStatus(orderId: string) {
   }
   return status;
 }
+export async function recheckPayment(orderId: string) {
+  if (!uuid.test(orderId)) throw new Error("올바른 주문 UUID를 입력해주세요.");
+  await payments.post(`/me/payments/orders/${orderId}/rechecks`, undefined, { headers: auth() });
+  const order = await getOrder(orderId);
+  const status = await paymentStatus(orderId);
+  return { order, status };
+}
 export function message(error: unknown) {
   if (axios.isAxiosError(error)) {
     if (!error.response) return error.code === "ECONNABORTED" || error.code === "ETIMEDOUT"
