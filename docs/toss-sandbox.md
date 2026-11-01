@@ -29,3 +29,5 @@
 POST /api/v1/auth/login에 email/password를 보내고 data.accessToken, data.tokenType, data.expiresIn, data.user를 읽습니다. 토큰은 기존 localStorage.token에 저장해 주문·결제 요청의 Bearer 헤더로 공유합니다. expiresIn(초) 기반 만료 시간을 확인하며 만료 시 재로그인이 필요합니다.
 
 개발 환경 로그인 기본 주소는 `http://localhost:8081/api/v1/auth/login`입니다. 다른 주소를 사용하려면 로컬 `.env.local`에 `VITE_AUTH_API_ORIGIN`을 설정하고 Vite를 재시작합니다. 배포 환경 기본값은 현재 출처의 `/api/v1/auth/login`이며 게이트웨이에서 인증 서비스로 연결해야 합니다. 실제 비밀번호·토큰은 설정 파일에 넣지 않습니다.
+
+로그인은 먼저 GET /api/v1/auth/csrf를 withCredentials로 호출합니다. 발급받은 data.token을 X-XSRF-TOKEN 헤더에 넣고 로그인 POST에도 withCredentials를 사용해 HttpOnly CSRF 쿠키를 함께 전송합니다. 토큰·쿠키는 로그에 출력하지 않습니다.

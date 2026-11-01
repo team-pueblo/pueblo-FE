@@ -146,8 +146,19 @@ const LoginPage: React.FC = () => {
       setLoading(true);
       persist(email, remember);
 
+      const baseURL = import.meta.env.VITE_AUTH_API_ORIGIN || (import.meta.env.DEV ? "http://localhost:8081" : window.location.origin);
+      const csrf = await api.get<{ data: { token: string; headerName: string } }>("/api/v1/auth/csrf", {
+        baseURL,
+        withCredentials: true,
+        monitoring: { endpoint: "/api/v1/auth/csrf", feature: "auth", action: "csrf" },
+      });
+      if (!csrf.data?.data?.token || csrf.data.data.headerName.toLowerCase() !== "x-xsrf-token") {
+        throw new Error("Invalid CSRF response");
+      }
       const { data } = await api.post<LoginResponse>("/api/v1/auth/login", { email, password }, {
-        baseURL: import.meta.env.VITE_AUTH_API_ORIGIN || (import.meta.env.DEV ? "http://localhost:8081" : window.location.origin),
+        baseURL,
+        withCredentials: true,
+        headers: { "X-XSRF-TOKEN": csrf.data.data.token },
         monitoring: { endpoint: "/api/v1/auth/login", feature: "auth", action: "login",
           critical: true },
       });
@@ -167,6 +178,8 @@ const LoginPage: React.FC = () => {
       captureHandledError(err, { feature: "auth", action: "login" });
       if (axios.isAxiosError(err) && [400, 401].includes(err.response?.status ?? 0)) {
         setError("이메일 또는 비밀번호를 확인해주세요.");
+      } else if (axios.isAxiosError(err) && err.response?.status === 403) {
+        setError("로그인 보안 검증이 거부되었습니다. 쿠키 설정을 확인하고 다시 시도해주세요.");
       } else {
         setError("로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
       }
