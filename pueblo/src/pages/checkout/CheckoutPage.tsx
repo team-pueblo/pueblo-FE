@@ -104,18 +104,18 @@ export function CheckoutResultPage() {
     if (!authenticated || !order || lock.current) return;
     lock.current = true; setBusy(true); setError("");
     try {
-      if (checkOnly) { setStatus(await paymentStatus(order.orderId) || "UNKNOWN"); return; }
+      if (checkOnly) { setStatus(await paymentStatus(order.orderId)); return; }
       const current = payable(await getOrder(order.orderId));
       if (current.totalAmount !== order.amount) throw new Error("주문 금액이 일치하지 않습니다.");
       // Persist before sending: uncertain responses must be reconciled by GET, not a repeated POST.
       sessionStorage.setItem(`pueblo-confirm:${order.orderId}`, "requested");
-      setStatus(await confirm(order.orderId, params.get("paymentKey")!, current.totalAmount) || "UNKNOWN");
+      setStatus(await confirm(order.orderId, params.get("paymentKey")!, current.totalAmount));
     } catch (e) { setError(message(e)); } finally { lock.current = false; setBusy(false); }
   }
   const requested = order && sessionStorage.getItem(`pueblo-confirm:${order.orderId}`);
   return <Panel><h1>{status === "SUCCEEDED" ? "결제 승인 성공" : "결제 승인 확인"}</h1>
     {status === "SUCCEEDED" ? <p>결제가 승인되었습니다. 주문 완료 및 재고 확정 처리는 아직 연동되지 않았습니다.</p> : authenticated ? <>
-      <p>{status ? `현재 결제 상태: ${status}` : "결제 인증이 완료되었습니다. 서버 승인을 진행해주세요."}</p>
+      <p>{status === "UNKNOWN" ? "서버에서 결제 승인 결과를 아직 확정하지 못했습니다. 잠시 후 결제 상태를 다시 확인해주세요." : status ? `현재 결제 상태: ${status}` : requested ? "결제 승인 요청을 전송했습니다. 결제 상태를 확인해주세요." : "결제 인증이 완료되었습니다. 서버 승인을 진행해주세요."}</p>
       <button disabled={busy} onClick={() => void approve(Boolean(requested))}>{busy ? "확인 중…" : requested ? "결제 상태 다시 확인" : "결제 승인 요청"}</button>
     </> : <p>인증 결과가 주문 정보와 일치하지 않습니다. 주문을 다시 확인해주세요.</p>}
     {error && <p role="alert">{error}</p>}

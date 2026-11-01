@@ -26,3 +26,17 @@ test('only PENDING_PAYMENT with valid server amount can proceed; confirm uses co
  assert.equal(api.calls[0].url,'/payments/confirm');assert.equal(api.calls[0].body.amount,39000);
  assert.equal(api.calls[0].config.headers.Authorization,'Bearer member-token');
 });
+
+test('invalid shipping is rejected before quote or order creation',async()=>{
+ const api=setup();const items=[{productId:api.id,skuId:api.id,quantity:1}];
+ const shipping={recipient:'A',phone:'12312',postalCode:'test',address1:'Address',address2:''};
+ await assert.rejects(api.createOrder(items,shipping),/연락처/);
+ await assert.rejects(api.createOrder(items,{...shipping,phone:'01012345678'}),/우편번호/);
+ assert.equal(api.calls.length,0);
+});
+test('missing payment status is distinct from a server UNKNOWN result',()=>{
+ const api=setup();
+ assert.equal(api.readPaymentStatus({data:{status:'UNKNOWN'}}),'UNKNOWN');
+ assert.equal(api.readPaymentStatus({data:{status:'SUCCEEDED'}}),'SUCCEEDED');
+ assert.throws(()=>api.readPaymentStatus({data:{}}),/상태 정보/);
+});

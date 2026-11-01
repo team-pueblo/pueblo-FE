@@ -1,10 +1,10 @@
+import RemoteProduct from "./RemoteProduct";
 import { useState } from "react";
 import { captureHandledError } from "../../monitoring/errors";
 import { Link, useParams } from "react-router-dom";
 import { Bookmark, Heart, Share2, ChevronUp, ChevronDown } from "lucide-react";
 import { catalogProducts } from "./catalog";
 import { currency } from "./data";
-import { addCartItem } from "../cart/cartStorage";
 import { useFavorites } from "../favorites/useFavorites";
 import * as S from "./ProductDetailPage.styled";
 
@@ -12,6 +12,7 @@ type CatalogProduct = (typeof catalogProducts)[number];
 
 export default function ProductDetailPage() {
   const { id } = useParams();
+  if (id && /^[0-9a-f-]{36}$/i.test(id)) return <RemoteProduct key={id} id={id} />;
   const product = catalogProducts.find((item) => String(item.id) === id);
   if (!product) {
     return <S.Page><S.Container><h1>상품을 찾을 수 없습니다.</h1><Link to="/">상품 목록으로 돌아가기</Link></S.Container></S.Page>;
@@ -33,25 +34,7 @@ function ProductDetailContent({ product }: { product: CatalogProduct }) {
     { id: "service", title: "A/S 안내", text: "상품별 A/S 정보는 준비 중입니다." },
   ];
 
-  const addToCart = () => {
-    try {
-      const added = addCartItem({
-        id: `catalog-${product.id}`,
-        brand: product.brand,
-        name: product.name,
-        price: product.price,
-        img: product.imageUrl,
-        qty: 1,
-        option: "옵션 미선택",
-        seller: "pueblo",
-        condition: "새상품",
-      });
-      setMessage(added ? "장바구니에 담았습니다." : "같은 상품은 최대 9개까지 담을 수 있습니다.");
-    } catch (error) {
-      captureHandledError(error, { feature: "cart", action: "add" });
-      setMessage("장바구니에 담지 못했습니다. 브라우저 저장 공간을 확인해주세요.");
-    }
-  };
+  const addToCart = () => setMessage("이 상품은 이전 샘플 상품입니다. 메인 화면에서 실제 상품을 선택해주세요.");
 
   const share = async () => {
     try {

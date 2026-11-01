@@ -2,6 +2,7 @@ export type CartItem = {
   id: string;
   productId?: string;
   skuId?: string;
+  maxQuantity?: number;
   brand: string;
   name: string;
   option?: string;
@@ -47,9 +48,9 @@ export function saveCart(state: CartState, storage: CartStorage = window.localSt
 export function addCartItem(item: CartItem, storage: CartStorage = window.localStorage) {
   const state = readCart(storage);
   const existing = state.items.find((entry) => entry.id === item.id);
-  if (existing && existing.qty >= 9) return false;
+  if (existing && existing.qty >= Math.min(9, item.maxQuantity ?? 9)) return false;
   const items = existing
-    ? state.items.map((entry) => entry.id === item.id ? { ...entry, qty: entry.qty + 1 } : entry)
+    ? state.items.map((entry) => entry.id === item.id ? { ...entry, ...item, qty: entry.qty + 1 } : entry)
     : [...state.items, { ...item, qty: 1 }];
   saveCart({ ...state, items, agreement: false }, storage);
   return true;

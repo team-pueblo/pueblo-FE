@@ -1,8 +1,9 @@
+import RemoteCatalog from "../product/RemoteCatalog";
 import * as S from "./MainPage.styled";
 
 import { catalogProducts } from "../product/catalog";
 
-const ProductListing = ({ products = catalogProducts }: { products?: typeof catalogProducts }) => (
+const ProductListing = ({ products }: { products?: typeof catalogProducts }) => products ? (
       <S.ProductGrid>
         {products.map((product) => (
           <S.ProductCard key={product.id} to={`/product/${product.id}`}>
@@ -18,6 +19,6 @@ const ProductListing = ({ products = catalogProducts }: { products?: typeof cata
           </S.ProductCard>
         ))}
       </S.ProductGrid>
-);
+) : <RemoteCatalog />;
 
 export default ProductListing;
