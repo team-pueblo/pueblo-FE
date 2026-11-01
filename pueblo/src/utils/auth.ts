@@ -7,9 +7,19 @@ export const checkTokenExpiration = (): void => {
     return;
   }
 
+  const expiresAt = localStorage.getItem('tokenExpiresAt');
+  if (expiresAt) {
+    if (!Number.isFinite(Number(expiresAt)) || Number(expiresAt) <= Date.now()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('tokenExpiresAt');
+    }
+    return;
+  }
+
   try {
     // JWT 토큰 디코딩 (실제 구현에서는 jwt-decode 라이브러리 사용 권장)
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
     const currentTime = Date.now() / 1000;
     
     if (payload.exp && payload.exp < currentTime) {
@@ -27,6 +37,7 @@ export const checkTokenExpiration = (): void => {
 };
 
 export const isAuthenticated = (): boolean => {
+  checkTokenExpiration();
   const token = localStorage.getItem('token');
   return !!token;
 };
@@ -45,6 +56,7 @@ export const getStoredUser = () => {
 };
 
 export const logout = (): void => {
+  localStorage.removeItem('tokenExpiresAt');
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   localStorage.removeItem('remember_email');

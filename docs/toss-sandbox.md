@@ -23,3 +23,9 @@
 인증 결과 화면에서 '결제 승인 요청'을 누르면 서버 주문 금액을 재검증하고 승인 POST를 전송합니다. 요청을 전송한 기록이 있으면 이후에는 GET 상태 조회만 수행합니다. 응답이 불확실하거나 처리 중이면 '결제 상태 다시 확인'으로 재조회합니다. data.status가 SUCCEEDED인 경우에만 '결제 승인 성공'을 표시합니다. 주문 완료 및 재고 확정은 백엔드 미구현이므로 성공으로 표시하거나 장바구니를 비우지 않습니다.
 
 실제 백엔드 데이터·로그인 계정으로 E2E 승인은 별도 검증이 필요합니다.
+
+## 로그인
+
+POST /api/v1/auth/login에 email/password를 보내고 data.accessToken, data.tokenType, data.expiresIn, data.user를 읽습니다. 토큰은 기존 localStorage.token에 저장해 주문·결제 요청의 Bearer 헤더로 공유합니다. expiresIn(초) 기반 만료 시간을 확인하며 만료 시 재로그인이 필요합니다.
+
+인증 서버가 별도 포트라면 로컬 `.env.local`에 `VITE_AUTH_API_ORIGIN=http://localhost:실제포트`를 설정하고 Vite를 재시작합니다. 포트는 아직 제공되지 않았으므로 임의 기본값을 넣지 않았습니다. 비어 있으면 현재 출처의 /api/v1/auth/login을 사용하므로 프록시/게이트웨이가 필요합니다. 실제 비밀번호·토큰은 설정 파일에 넣지 않습니다.

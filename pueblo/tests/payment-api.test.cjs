@@ -8,7 +8,7 @@ function setup(){
  const calls=[];const saved=new Map();const id='12345678-1234-1234-1234-123456789abc';
  const client={get:async(url,config)=>{calls.push({url,config});return {data:{data:{orderId:id,status:'PENDING_PAYMENT',totalAmount:39000}}}},post:async(url,body,config)=>{calls.push({url,body,config});return {data:{data:url==='/checkout/quotes'?{quoteId:id}:url==='/orders'?{orderId:id}:{status:'SUCCEEDED'}}}}};
  const source=fs.readFileSync('src/pages/checkout/paymentApi.ts','utf8').replaceAll('import.meta.env.DEV','true');
- const exports={};vm.runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:()=>({default:{create:()=>client,isAxiosError:()=>false}}),localStorage:{getItem:()=> 'member-token'},sessionStorage:{getItem:k=>saved.get(k),setItem:(k,v)=>saved.set(k,v)},crypto:webcrypto,TextEncoder});return {...exports,calls,id};
+ const exports={};vm.runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:name=>name==='axios'?({default:{create:()=>client,isAxiosError:()=>false}}):{checkTokenExpiration:()=>{}},localStorage:{getItem:()=> 'member-token'},sessionStorage:{getItem:k=>saved.get(k),setItem:(k,v)=>saved.set(k,v)},crypto:webcrypto,TextEncoder});return {...exports,calls,id};
 }
 test('order retries reuse the persisted server order and send the same member auth',async()=>{
  const api=setup();const items=[{productId:api.id,skuId:api.id,quantity:1}];const shipping={recipient:'A',phone:'01012345678',postalCode:'12345',address1:'Address',address2:''};

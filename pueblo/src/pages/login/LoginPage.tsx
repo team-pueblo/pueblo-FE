@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // 2) 절대경로 import
 import KakaoLogin from "../../components/KakaoLogin";
-import { checkTokenExpiration } from "../../utils/auth";
+
 
 // 3) 상대경로 import (부모 → 자식)
 
@@ -35,24 +35,15 @@ const MAX_EMAIL_LEN = 50;
 const MAX_PASSWORD_LEN = 100;
 
 // ===== Types =====
-type LoginUser = {
-  id: number | string;
-  email: string;
-  name?: string;
-  [key: string]: unknown;
+type LoginResponse = {
+  data: {
+    accessToken: string;
+    tokenType: string;
+    expiresIn: number;
+    user: { id: string; email: string; nickname: string };
+  };
+  requestId: string;
 };
-
-type LoginSuccess = {
-  token: string;
-  user: LoginUser;
-  message?: string;
-};
-
-type LoginFail = {
-  message: string;
-};
-
-type LoginResponse = LoginSuccess | LoginFail;
 
 // ===== Hook example (naming rule: use prefix) =====
 const useRememberedEmail = () => {
@@ -155,26 +146,23 @@ const LoginPage: React.FC = () => {
       setLoading(true);
       persist(email, remember);
 
-      const { data } = await api.post<LoginResponse>("/login", { email, password }, {
-        monitoring: { endpoint: "/api/login", feature: "auth", action: "login",
+      const { data } = await api.post<LoginResponse>("/api/v1/auth/login", { email, password }, {
+        baseURL: import.meta.env.VITE_AUTH_API_ORIGIN || window.location.origin,
+        monitoring: { endpoint: "/api/v1/auth/login", feature: "auth", action: "login",
           critical: true },
       });
-      if (!data || typeof data !== "object") throw new Error("Invalid login response");
-
-      if ("token" in data && typeof data.token === "string" && data.user && typeof data.user === "object") {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ ...data.user, isSocialLogin: false }),
-        );
-        checkTokenExpiration();
-        alert("로그인 성공!");
-        navigate("/");
-      } else if ("message" in data && typeof data.message === "string") {
-        setError(data.message || "로그인에 실패했습니다.");
-      } else {
+      const session = data?.data;
+      if (!session || typeof session.accessToken !== "string" || !session.accessToken.trim()
+        || typeof session.tokenType !== "string" || session.tokenType.toLowerCase() !== "bearer"
+        || !Number.isFinite(session.expiresIn) || session.expiresIn <= 0
+        || !session.user || typeof session.user.id !== "string") {
         throw new Error("Invalid login response");
       }
+      localStorage.setItem("token", session.accessToken);
+      localStorage.setItem("tokenExpiresAt", String(Date.now() + session.expiresIn * 1000));
+      localStorage.setItem("user", JSON.stringify({ ...session.user, isSocialLogin: false }));
+      alert("로그인 성공!");
+      navigate("/");
     } catch (err) {
       captureHandledError(err, { feature: "auth", action: "login" });
       if (axios.isAxiosError(err) && [400, 401].includes(err.response?.status ?? 0)) {

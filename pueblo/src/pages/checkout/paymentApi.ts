@@ -1,9 +1,11 @@
 import axios from "axios";
+import { checkTokenExpiration } from "../../utils/auth";
 
 const orders = axios.create({ baseURL: import.meta.env.DEV ? "http://localhost:8083/api/v1" : "/api/v1", timeout: 15000 });
 const payments = axios.create({ baseURL: import.meta.env.DEV ? "http://localhost:8084/api/v1" : "/api/v1", timeout: 15000 });
 export const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export function auth() {
+  checkTokenExpiration();
   const token = localStorage.getItem("token");
   if (!token) throw new Error("로그인이 필요합니다.");
   return { Authorization: `Bearer ${token}` };
