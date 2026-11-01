@@ -413,8 +413,8 @@ useEffect(() => {
             onClick={() => {
               try {
                 if (!Number.isSafeInteger(totals.total) || totals.total <= 0) { setToast("결제 금액을 확인해주세요."); return; }
-                sessionStorage.setItem("pueblo-sandbox-order", JSON.stringify({ orderId: crypto.randomUUID(), orderName: "pueblo 상품 테스트 주문", amount: totals.total }));
-                navigate("/checkout");
+                sessionStorage.setItem("pueblo-checkout-items", JSON.stringify(selectedItems.map(item => ({ productId: item.productId || "", skuId: item.skuId || "", quantity: item.qty }))));
+                navigate("/checkout/new");
               } catch { setToast("결제 정보를 저장하지 못했습니다. 브라우저 저장 설정을 확인해주세요."); }
             }}
           >

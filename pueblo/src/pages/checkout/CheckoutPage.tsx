@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import styled from "styled-components";
+import { getOrder, payable, confirm, paymentStatus, message } from "./paymentApi";
 
 const Panel = styled.section`
   max-width: 640px; margin: 40px auto; padding: 0 20px;
@@ -30,7 +31,7 @@ type Order = { orderId: string; orderName: string; amount: number };
 function readOrder(): Order | null {
   try {
     const value = JSON.parse(sessionStorage.getItem("pueblo-sandbox-order") || "null");
-    return value && typeof value.orderId === "string" && typeof value.orderName === "string" && Number.isSafeInteger(value.amount) && value.amount > 0 ? value : null;
+    return value && value.source === "backend" && typeof value.orderId === "string" && typeof value.orderName === "string" && Number.isSafeInteger(value.amount) && value.amount > 0 ? value : null;
   } catch { return null; }
 }
 type Widgets = ReturnType<Awaited<ReturnType<typeof loadTossPayments>>["widgets"]>;
@@ -76,10 +77,12 @@ export default function CheckoutPage() {
     if (!order || !widgets.current || lock.current) return;
     lock.current = true; setBusy(true); setError("");
     try {
+      const current = payable(await getOrder(order.orderId));
+      if (current.totalAmount !== order.amount) throw new Error("주문 금액이 변경되었습니다. 주문을 다시 확인해주세요.");
       await widgets.current.requestPayment({ orderId: order.orderId, orderName: order.orderName,
         successUrl: `${location.origin}/checkout/success`, failUrl: `${location.origin}/checkout/fail` });
-    } catch {
-      setError("결제가 취소되었거나 요청에 실패했습니다. 다시 시도해주세요.");
+    } catch (e) {
+      setError(message(e));
     } finally { lock.current = false; setBusy(false); }
   }
   return <Panel aria-label="결제">
@@ -90,10 +93,32 @@ export default function CheckoutPage() {
 
 export function CheckoutResultPage() {
   const location = useLocation();
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const lock = useRef(false);
   const params = new URLSearchParams(location.search);
   const order = readOrder();
   const authenticated = location.pathname.endsWith("/success") && order && params.get("orderId") === order.orderId && Number(params.get("amount")) === order.amount && !!params.get("paymentKey");
-  return <Panel><h1>{authenticated ? "테스트 결제 인증 결과 수신" : "테스트 결제를 완료하지 못했습니다"}</h1>
-    <p>{authenticated ? "아직 결제가 승인되지 않았습니다. 서버에서 주문 금액을 검증하고 토스 결제 승인 API를 호출해야 결제가 완료됩니다." : "결제가 취소되었거나 요청 정보가 일치하지 않습니다. 장바구니에서 다시 시도해주세요."}</p>
-    <BackButton to="/cart">장바구니로 돌아가기</BackButton></Panel>;
+  async function approve(checkOnly: boolean) {
+    if (!authenticated || !order || lock.current) return;
+    lock.current = true; setBusy(true); setError("");
+    try {
+      if (checkOnly) { setStatus(await paymentStatus(order.orderId) || "UNKNOWN"); return; }
+      const current = payable(await getOrder(order.orderId));
+      if (current.totalAmount !== order.amount) throw new Error("주문 금액이 일치하지 않습니다.");
+      // Persist before sending: uncertain responses must be reconciled by GET, not a repeated POST.
+      sessionStorage.setItem(`pueblo-confirm:${order.orderId}`, "requested");
+      setStatus(await confirm(order.orderId, params.get("paymentKey")!, current.totalAmount) || "UNKNOWN");
+    } catch (e) { setError(message(e)); } finally { lock.current = false; setBusy(false); }
+  }
+  const requested = order && sessionStorage.getItem(`pueblo-confirm:${order.orderId}`);
+  return <Panel><h1>{status === "SUCCEEDED" ? "결제 승인 성공" : "결제 승인 확인"}</h1>
+    {status === "SUCCEEDED" ? <p>결제가 승인되었습니다. 주문 완료 및 재고 확정 처리는 아직 연동되지 않았습니다.</p> : authenticated ? <>
+      <p>{status ? `현재 결제 상태: ${status}` : "결제 인증이 완료되었습니다. 서버 승인을 진행해주세요."}</p>
+      <button disabled={busy} onClick={() => void approve(Boolean(requested))}>{busy ? "확인 중…" : requested ? "결제 상태 다시 확인" : "결제 승인 요청"}</button>
+    </> : <p>인증 결과가 주문 정보와 일치하지 않습니다. 주문을 다시 확인해주세요.</p>}
+    {error && <p role="alert">{error}</p>}
+    <BackButton to="/checkout/new">주문 확인으로 돌아가기</BackButton>
+  </Panel>;
 }
