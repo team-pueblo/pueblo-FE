@@ -29,6 +29,10 @@ export default function PrepareOrderPage() {
    }
    const order = await getOrder(orderId);
    if (order.status === "PREPARING") { setError("재고 확보 중입니다. 잠시 후 주문 확인을 눌러주세요."); return; }
+   if (order.status === "RECONCILIATION_REQUIRED") {
+    setError("이 주문은 결제 결과 대조가 필요합니다. 결제 성공·실패가 확정되지 않았으므로 다시 결제하지 말고 담당자의 토스 결제 내역 확인을 기다려주세요.");
+    return;
+   }
    if (order.status === "PAYMENT_PROCESSING") {
     const status = await paymentStatus(orderId);
     setError(status === "REVIEW_REQUIRED"
