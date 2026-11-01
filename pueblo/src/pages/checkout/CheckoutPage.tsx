@@ -113,12 +113,20 @@ export function CheckoutResultPage() {
     } catch (e) { setError(message(e)); } finally { lock.current = false; setBusy(false); }
   }
   const requested = order && sessionStorage.getItem(`pueblo-confirm:${order.orderId}`);
-  return <Panel><h1>{status === "SUCCEEDED" ? "결제 승인 성공" : "결제 승인 확인"}</h1>
+  return <Panel><h1>{status === "SUCCEEDED" ? "결제 승인 성공" : status === "REVIEW_REQUIRED" ? "결제 확인이 필요합니다" : "결제 승인 확인"}</h1>
     {status === "SUCCEEDED" ? <p>결제가 승인되었습니다. 주문 완료 및 재고 확정 처리는 아직 연동되지 않았습니다.</p> : authenticated ? <>
+      {status === "REVIEW_REQUIRED" ? <>
+        <p role="status">승인 성공 또는 실패가 아직 확정되지 않았습니다. 자동 확인이 종료되어 담당자의 결제 내역 확인이 필요합니다.</p>
+        <p>중복 결제를 피하기 위해 같은 상품을 다시 결제하지 마세요. 문의 시 아래 주문 번호를 전달해주세요.</p>
+        <p>주문 번호: {order.orderId}</p>
+        <p>담당자의 확인 이후 처리 결과를 조회할 수 있습니다. 이 버튼은 결제를 재시도하지 않습니다.</p>
+        <button disabled={busy} onClick={() => void approve(true)}>{busy ? "확인 중…" : "처리 결과 조회"}</button>
+      </> : <>
       <p>{status === "UNKNOWN" ? "서버에서 결제 승인 결과를 아직 확정하지 못했습니다. 잠시 후 결제 상태를 다시 확인해주세요." : status ? `현재 결제 상태: ${status}` : requested ? "결제 승인 요청을 전송했습니다. 결제 상태를 확인해주세요." : "결제 인증이 완료되었습니다. 서버 승인을 진행해주세요."}</p>
       <button disabled={busy} onClick={() => void approve(Boolean(requested))}>{busy ? "확인 중…" : requested ? "결제 상태 다시 확인" : "결제 승인 요청"}</button>
+      </>}
     </> : <p>인증 결과가 주문 정보와 일치하지 않습니다. 주문을 다시 확인해주세요.</p>}
     {error && <p role="alert">{error}</p>}
-    <BackButton to="/checkout/new">주문 확인으로 돌아가기</BackButton>
+    <BackButton to={status === "REVIEW_REQUIRED" ? "/" : "/checkout/new"}>{status === "REVIEW_REQUIRED" ? "홈으로 돌아가기" : "주문 확인으로 돌아가기"}</BackButton>
   </Panel>;
 }
