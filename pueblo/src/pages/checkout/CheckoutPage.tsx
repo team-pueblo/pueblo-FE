@@ -65,8 +65,8 @@ export default function CheckoutPage() {
       setError("결제가 취소되었거나 요청에 실패했습니다. 다시 시도해주세요.");
     } finally { lock.current = false; setBusy(false); }
   }
-  return <Panel><h1>테스트 결제</h1><p>샌드박스 결제입니다. 실제 청구되지 않습니다.</p>
-    {order ? <><p>{order.orderName} · {order.amount.toLocaleString("ko-KR")}원</p><div id="payment-methods" /><div id="payment-agreement" />
+  return <Panel aria-label="결제">
+    {order ? <><div id="payment-methods" /><div id="payment-agreement" />
       <button disabled={!ready || busy} onClick={() => void pay()}>{busy ? "결제 요청 중…" : "테스트 결제하기"}</button></> : <p>장바구니에서 결제할 상품을 먼저 선택해주세요.</p>}
     {error && <p role="alert">{error}</p>}<Link to="/cart">장바구니로 돌아가기</Link></Panel>;
 }
