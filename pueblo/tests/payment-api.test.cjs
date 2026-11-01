@@ -8,13 +8,13 @@ function setup({paymentState='REVIEW_REQUIRED',orderState='PENDING_PAYMENT',post
  const calls=[];const saved=new Map();const id='12345678-1234-1234-1234-123456789abc';
  const client={get:async(url,config)=>{calls.push({url,config});return {data:{data:{orderId:id,status:url.includes('/payments/')?paymentState:orderState,totalAmount:39000}}}},post:async(url,body,config)=>{calls.push({url,body,config});if(postError)throw postError;return {data:{data:url==='/checkout/quotes'?{quoteId:id}:url==='/orders'?{orderId:id}:{status:'SUCCEEDED'}}}}};
  const source=fs.readFileSync('src/pages/checkout/paymentApi.ts','utf8').replaceAll('import.meta.env.DEV','true');
- const exports={};vm.runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:name=>name==='axios'?({default:{create:()=>client,isAxiosError:error=>error?.isAxiosError===true}}):{checkTokenExpiration:()=>{}},localStorage:{getItem:()=> 'member-token'},sessionStorage:{getItem:k=>saved.get(k),setItem:(k,v)=>saved.set(k,v)},crypto:webcrypto,TextEncoder});return {...exports,calls,id};
+ const exports={};vm.runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:name=>name==='axios'?({default:{create:()=>client,isAxiosError:error=>error?.isAxiosError===true}}):{checkTokenExpiration:()=>{}},localStorage:{getItem:()=> 'member-token'},sessionStorage:{getItem:k=>saved.get(k),setItem:(k,v)=>saved.set(k,v),removeItem:k=>saved.delete(k)},crypto:webcrypto,TextEncoder});return {...exports,calls,id,saved};
 }
 test('order retries reuse the persisted server order and send the same member auth',async()=>{
  const api=setup();const items=[{productId:api.id,skuId:api.id,quantity:1}];const shipping={recipient:'A',phone:'01012345678',postalCode:'12345',address1:'Address',address2:''};
  assert.equal(await api.createOrder(items,shipping),api.id);
  assert.equal(await api.createOrder(items,shipping),api.id);
- assert.equal(api.calls.length,2);
+ assert.equal(api.calls.length,3);
  assert.equal(api.calls[1].config.headers.Authorization,'Bearer member-token');
  assert.match(api.calls[1].config.headers['Idempotency-Key'],api.uuid);
  assert.equal(api.calls[1].body.quoteId,api.id);
@@ -64,4 +64,22 @@ test('recheck uses server final status and never guesses failure or retries a fa
  const failure=new Error('timeout');const failing=setup({postError:failure});
  await assert.rejects(failing.recheckPayment(failing.id),/timeout/);assert.equal(failing.calls.length,1);
  await assert.rejects(failing.recheckPayment('invalid'),/UUID/);assert.equal(failing.calls.length,1);
+});
+
+test('server REJECTED releases old request for a fresh quote and idempotency key',async()=>{
+ for(const changed of [false,true]){
+  const api=setup({orderState:'REJECTED'});
+  const items=[{productId:api.id,skuId:api.id,quantity:1}];const shipping={recipient:'A',phone:'01012345678',postalCode:'12345',address1:'Address',address2:''};
+  await api.createOrder(items,shipping);
+  const oldKey=api.calls[1].config.headers['Idempotency-Key'];
+  await api.createOrder(items,{...shipping,address2:changed?'Updated':''});
+  assert.deepEqual(api.calls.map(c=>c.url),['/checkout/quotes','/orders',`/me/orders/${api.id}`,'/checkout/quotes','/orders']);
+  assert.notEqual(api.calls[4].config.headers['Idempotency-Key'],oldKey);
+ }
+});
+test('uncertain orders retain saved request and block a changed checkout',async()=>{
+ const api=setup({orderState:'RECONCILIATION_REQUIRED'});const items=[{productId:api.id,skuId:api.id,quantity:1}];const shipping={recipient:'A',phone:'01012345678',postalCode:'12345',address1:'Address',address2:''};
+ await api.createOrder(items,shipping);const saved=api.saved.get('pueblo-order-request');
+ await assert.rejects(api.createOrder(items,{...shipping,address2:'Updated'}),/이전 주문/);
+ assert.equal(api.saved.get('pueblo-order-request'),saved);assert.equal(api.calls.length,3);
 });

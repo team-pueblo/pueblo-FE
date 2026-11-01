@@ -40,6 +40,15 @@ export async function createOrder(items: { productId: string; skuId: string; qua
   const signature = JSON.stringify({ items, shipping, owner });
   const saved = sessionStorage.getItem("pueblo-order-request");
   let request = saved ? JSON.parse(saved) : null;
+  if (request?.orderId) {
+    // Only a server-confirmed rejected order releases the previous request.
+    // Lookup failures and unresolved payment states must preserve retry data.
+    const previousOrder = await getOrder(request.orderId);
+    if (previousOrder.status === "REJECTED") {
+      sessionStorage.removeItem("pueblo-order-request");
+      request = null;
+    }
+  }
   if (request?.body?.shipping && !request.orderId) {
     try { validateShipping(request.body.shipping); }
     catch { request = null; } // Legacy invalid inputs cannot pass the server's Shipping validation.
@@ -47,7 +56,7 @@ export async function createOrder(items: { productId: string; skuId: string; qua
   if (request && request.signature !== signature) {
     // Requests rejected by input validation can be edited. Uncertain requests retain their key/body.
     if (request.validationRejected && !request.orderId) request = null;
-    else throw new Error("이전 주문 요청을 먼저 확인해주세요. 주문 정보가 변경되었습니다.");
+    else throw new Error("아직 처리 중인 이전 주문이 있습니다. 구매 내역에서 이전 주문 상태를 확인해주세요.");
   }
   if (!request) {
     if (!items.length || items.some(i => !uuid.test(i.productId) || !uuid.test(i.skuId) || !Number.isInteger(i.quantity) || i.quantity < 1)) throw new Error("실제 상품·SKU UUID가 필요합니다. 샘플 상품으로 주문할 수 없습니다.");

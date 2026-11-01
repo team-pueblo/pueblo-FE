@@ -10,7 +10,7 @@ const Layout=styled.div`
  button,.button{border:1px solid #ddd;border-radius:10px;padding:12px 20px;background:white;cursor:pointer;font:inherit;font-size:13px;display:inline-block;margin:8px 8px 8px 0;} button:disabled{opacity:.5;} .primary{background:#222;color:white;} .order{display:block;padding:24px 0;border-bottom:1px solid #eee;} .order strong{display:block;margin-bottom:12px;} .notice{line-height:1.7;font-size:14px;}
  @media(max-width:650px){margin:30px auto;padding:0 18px;grid-template-columns:1fr;gap:20px;aside{display:flex;gap:20px;align-items:center;}aside a{margin:0;}h1{font-size:22px;margin-bottom:24px;}}
 `;
-const labels:Record<string,string>={PAID:"결제 완료",PREPARING:"주문 준비 중",PENDING_PAYMENT:"결제 대기",PAYMENT_PROCESSING:"결제 확인 중",RECONCILIATION_REQUIRED:"결제 결과 확인 필요",COMPLETED:"주문 완료",CANCELED:"주문 취소",CANCELLED:"주문 취소",EXPIRED:"주문 만료",FAILED:"주문 실패"};
+const labels:Record<string,string>={REJECTED:"주문 종료",PAID:"결제 완료",PREPARING:"주문 준비 중",PENDING_PAYMENT:"결제 대기",PAYMENT_PROCESSING:"결제 확인 중",RECONCILIATION_REQUIRED:"결제 결과 확인 필요",COMPLETED:"주문 완료",CANCELED:"주문 취소",CANCELLED:"주문 취소",EXPIRED:"주문 만료",FAILED:"주문 실패"};
 const paymentLabels:Record<string,string>={SUCCEEDED:"승인 완료",REVIEW_REQUIRED:"결제 재확인 필요",UNKNOWN:"결과 확인 중",FAILED:"승인 실패"};
 export default function OrdersPage(){
  const recheckLock=useRef(false);
