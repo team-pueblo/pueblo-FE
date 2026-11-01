@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import styled from "styled-components";
-import { getOrder, payable, confirm, paymentStatus, message } from "./paymentApi";
+import { CheckoutLayout, OrderProducts } from "./CheckoutLayout";
+import { getOrder, payable, confirm, paymentStatus, message, type Shipping } from "./paymentApi";
 
 const Panel = styled.section`
   max-width: 640px; margin: 40px auto; padding: 0 20px;
@@ -27,7 +28,7 @@ const BackButton = styled(Link)`
   &:hover { background: #f5f5f5; }
   &:focus-visible { outline: 2px solid #111; outline-offset: 3px; }
 `;
-type Order = { orderId: string; orderName: string; amount: number };
+type Order = { orderId: string; orderName: string; amount: number; shipping?: Shipping };
 function readOrder(): Order | null {
   try {
     const value = JSON.parse(sessionStorage.getItem("pueblo-sandbox-order") || "null");
@@ -85,10 +86,11 @@ export default function CheckoutPage() {
       setError(message(e));
     } finally { lock.current = false; setBusy(false); }
   }
-  return <Panel aria-label="결제">
-    {order ? <><div id="payment-methods" /><div id="payment-agreement" />
-      <button disabled={!ready || busy} onClick={() => void pay()}>{busy ? "결제 요청 중…" : "결제하기"}</button></> : <p>장바구니에서 결제할 상품을 먼저 선택해주세요.</p>}
-    {error && <p role="alert">{error}</p>}<BackButton to="/cart">장바구니로 돌아가기</BackButton></Panel>;
+  return <CheckoutLayout><main><h1>배송 / 결제</h1>{order?.shipping && <><h2>배송 주소</h2><div className="card"><p><strong>{order.shipping.recipient}</strong></p><p>{order.shipping.phone}</p><p>[{order.shipping.postalCode}] {order.shipping.address1} {order.shipping.address2}</p></div></>}{order?.shipping && <OrderProducts/>}<h2>결제 방법</h2>
+    {order ? <><div className="card"><div id="payment-methods" /><div id="payment-agreement" /></div>
+      <div className="bottom"><button className="primary" disabled={!ready || busy} onClick={() => void pay()}>{busy ? "결제 요청 중…" : `${order.amount.toLocaleString("ko-KR")}원 · 결제하기`}</button></div></> : <p>장바구니에서 결제할 상품을 먼저 선택해주세요.</p>}
+    {error && <p className="notice" role="alert">{error}</p>}<BackButton to="/cart">장바구니로 돌아가기</BackButton></main></CheckoutLayout>;
+
 }
 
 export function CheckoutResultPage() {
@@ -127,6 +129,6 @@ export function CheckoutResultPage() {
       </>}
     </> : <p>인증 결과가 주문 정보와 일치하지 않습니다. 주문을 다시 확인해주세요.</p>}
     {error && <p role="alert">{error}</p>}
-    <BackButton to={status === "REVIEW_REQUIRED" ? "/" : "/checkout/new"}>{status === "REVIEW_REQUIRED" ? "홈으로 돌아가기" : "주문 확인으로 돌아가기"}</BackButton>
+    <BackButton to={order ? `/orders/${order.orderId}` : "/orders"}>주문 내역 확인</BackButton>
   </Panel>;
 }

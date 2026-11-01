@@ -10,7 +10,11 @@ export function auth() {
   if (!token) throw new Error("로그인이 필요합니다.");
   return { Authorization: `Bearer ${token}` };
 }
-export type ServerOrder = { orderId: string; status: string; totalAmount: number };
+export type ServerOrder = { orderId: string; status: string; totalAmount: number; currency?: string; createdAt?: string; shipping?: Shipping; items?: { productId: string; skuId: string; name: string; brand: string; options: Record<string,string>; unitPrice: number; quantity: number; amount: number }[] };
+export async function getOrders(page = 1) {
+  const response = await orders.get<{data:{items:ServerOrder[];total:number}}>("/me/orders", {params:{page,size:20},headers:auth()});
+  return response.data.data;
+}
 export async function getOrder(id: string) {
   if (!uuid.test(id)) throw new Error("올바른 주문 UUID를 입력해주세요.");
   const { data } = await orders.get<{ data: ServerOrder }>(`/me/orders/${id}`, { headers: auth() });
