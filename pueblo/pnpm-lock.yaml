@@ -11,6 +11,9 @@ importers:
       '@sentry/react':
         specifier: ^11.4.0
         version: 11.4.0(react@19.3.0)
+      '@tosspayments/tosspayments-sdk':
+        specifier: ^2.10.0
+        version: 2.10.0
       axios:
         specifier: ^1.20.0
         version: 1.20.0
@@ -978,6 +981,10 @@ packages:
     dependencies:
       '@sentry/browser-utils': 11.4.0
       '@sentry/core': 11.4.0
+    dev: false
+
+  /@tosspayments/tosspayments-sdk@2.10.0:
+    resolution: {integrity: sha512-nwpLRKPBwFvajv6MG2bCqB9dAyeHeIAhBaTeAEm9T0NHvjGrv11pGtWEF+GEXXwNGlof4LROZEKQEJMe808U7w==}
     dev: false
 
   /@types/babel__core@7.20.5:
