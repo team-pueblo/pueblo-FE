@@ -28,4 +28,4 @@
 
 POST /api/v1/auth/login에 email/password를 보내고 data.accessToken, data.tokenType, data.expiresIn, data.user를 읽습니다. 토큰은 기존 localStorage.token에 저장해 주문·결제 요청의 Bearer 헤더로 공유합니다. expiresIn(초) 기반 만료 시간을 확인하며 만료 시 재로그인이 필요합니다.
 
-인증 서버가 별도 포트라면 로컬 `.env.local`에 `VITE_AUTH_API_ORIGIN=http://localhost:실제포트`를 설정하고 Vite를 재시작합니다. 포트는 아직 제공되지 않았으므로 임의 기본값을 넣지 않았습니다. 비어 있으면 현재 출처의 /api/v1/auth/login을 사용하므로 프록시/게이트웨이가 필요합니다. 실제 비밀번호·토큰은 설정 파일에 넣지 않습니다.
+개발 환경 로그인 기본 주소는 `http://localhost:8081/api/v1/auth/login`입니다. 다른 주소를 사용하려면 로컬 `.env.local`에 `VITE_AUTH_API_ORIGIN`을 설정하고 Vite를 재시작합니다. 배포 환경 기본값은 현재 출처의 `/api/v1/auth/login`이며 게이트웨이에서 인증 서비스로 연결해야 합니다. 실제 비밀번호·토큰은 설정 파일에 넣지 않습니다.

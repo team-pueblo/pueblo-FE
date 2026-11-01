@@ -147,7 +147,7 @@ const LoginPage: React.FC = () => {
       persist(email, remember);
 
       const { data } = await api.post<LoginResponse>("/api/v1/auth/login", { email, password }, {
-        baseURL: import.meta.env.VITE_AUTH_API_ORIGIN || window.location.origin,
+        baseURL: import.meta.env.VITE_AUTH_API_ORIGIN || (import.meta.env.DEV ? "http://localhost:8081" : window.location.origin),
         monitoring: { endpoint: "/api/v1/auth/login", feature: "auth", action: "login",
           critical: true },
       });
