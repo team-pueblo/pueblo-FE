@@ -105,7 +105,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         items: state.items.map((it) =>
-          it.id === action.id ? { ...it, qty: Math.min(it.qty + 1, 9) } : it,
+          it.id === action.id ? { ...it, qty: Math.min(it.qty + 1, it.maxQuantity ?? 9, 9) } : it,
         ),
       };
     case "DEC":
@@ -410,9 +410,15 @@ useEffect(() => {
           )}
           <CheckoutButtonStyled
             disabled={selectedItems.length === 0 || !state.agreement}
-            onClick={() => navigate("/login")}
+            onClick={() => {
+              try {
+                if (selectedItems.some(item => !item.productId || !item.skuId)) { setToast("이전 샘플 상품을 선택 해제하고 메인에서 실제 상품을 담아주세요."); return; }
+                if (!Number.isSafeInteger(totals.total) || totals.total <= 0) { setToast("결제 금액을 확인해주세요."); return; }
+                sessionStorage.setItem("pueblo-checkout-items", JSON.stringify(selectedItems.map(item => ({ productId: item.productId || "", skuId: item.skuId || "", quantity: item.qty }))));
+                navigate("/checkout/new");
+              } catch { setToast("결제 정보를 저장하지 못했습니다. 브라우저 저장 설정을 확인해주세요."); }
+            }}
           >
-            <img src="/images/toss-pay.svg" alt="토스페이" />
             결제하기
           </CheckoutButtonStyled>
           <Link className="continue" to="/">계속 쇼핑하기</Link>

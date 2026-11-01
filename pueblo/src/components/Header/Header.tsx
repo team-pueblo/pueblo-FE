@@ -33,6 +33,7 @@ const Header = () => {
         </Logo>
 
         <RightNav>
+          <NavItem><Link to="/orders" style={{textDecoration:"none",color:"inherit"}}>구매 내역</Link></NavItem>
           <NavItem>
             <Link
               to="/cart"

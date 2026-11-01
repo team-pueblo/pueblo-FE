@@ -4,6 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme/theme";
 import App from "./App";
+import OrdersPage from "./pages/checkout/OrdersPage";
+import PrepareOrderPage from "./pages/checkout/PrepareOrderPage";
+import CheckoutPage, { CheckoutResultPage } from "./pages/checkout/CheckoutPage";
 import MainPage from "./pages/Main/MainPage";
 import CategoryPage from "./pages/Main/CategoryPage";
 import BrandsPage from "./pages/brands/BrandsPage";
@@ -32,6 +35,12 @@ ReactDOM.createRoot(document.getElementById("root")!, sentryRootOptions).render(
           <Route path="/privacy" element={<LegalPage kind="privacy" />} />
           <Route path="/" element={<App />}>
             <Route index element={<MainPage />} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="orders/:orderId" element={<OrdersPage />} />
+            <Route path="checkout/new" element={<PrepareOrderPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="checkout/success" element={<CheckoutResultPage />} />
+            <Route path="checkout/fail" element={<CheckoutResultPage />} />
             <Route path="favorites" element={<FavoritesPage />} />
             <Route path="search" element={<SearchPage />} />
             <Route path="men" element={<CategoryPage title="남성" />} />
