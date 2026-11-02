@@ -17,3 +17,13 @@ export async function getCategories(signal?: AbortSignal) {
  const response = await client.get<{data:{id:string;slug:string;name:string}[]}>("/categories", {signal});
  return response.data.data;
 }
+
+export type Brand = {id:string;slug:string;name:string;koreanName?:string;logoUrl?:string|null};
+export async function getBrands(page:number,q:string,signal?:AbortSignal){
+ const response=await client.get<{data:{items:Brand[];total:number}}>("/brands",{params:{page,size:24,q:q||undefined},signal});
+ return response.data.data;
+}
+export async function getBrand(slug:string,signal?:AbortSignal){
+ const response=await client.get<{data:Brand}>(`/brands/${encodeURIComponent(slug)}`,{signal});
+ return response.data.data;
+}
