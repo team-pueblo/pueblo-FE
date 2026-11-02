@@ -16,7 +16,7 @@ spec:
       containers:
         - name: pueblo-fe
           # CI replaces this placeholder with the successfully published commit tag.
-          image: ghcr.io/team-pueblo/pueblo-fe:sha-8a5fcb02116870f34801dbde5f8200a6496a2648
+          image: ghcr.io/team-pueblo/pueblo-fe:sha-28041b9a6e06a7bb69dfa3237f753fdf760f70bc
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
