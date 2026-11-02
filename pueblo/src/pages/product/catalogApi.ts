@@ -1,6 +1,6 @@
 import axios from "axios";
 export type Sku = { id: string; options: Record<string,string>; price: number; availableQuantity: number; purchaseLimit: number; saleStatus: string };
-export type Product = { id: string; name: string; brand: { name: string; logoUrl?: string | null }; imageUrl?: string; images?: string[]; salePrice: number; listPrice: number; currency: string; saleStatus: string; isNew: boolean; skus: Sku[] };
+export type Product = { description?: string; policy?: Record<string, string>; id: string; name: string; brand: { name: string; logoUrl?: string | null }; imageUrl?: string; images?: string[]; salePrice: number; listPrice: number; currency: string; saleStatus: string; isNew: boolean; skus: Sku[] };
 const client = axios.create({ baseURL: import.meta.env.DEV ? "http://localhost:8082/api/v1" : "/api/v1", timeout: 15000 });
 export type CatalogFilter = { categoryId?: string; collection?: string; onSale?: boolean; q?: string; brandSlug?: string };
 export async function getProducts(page: number, signal?: AbortSignal, filter: CatalogFilter = {}) {

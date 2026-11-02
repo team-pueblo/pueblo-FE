@@ -5,6 +5,7 @@ import { addCartItem } from "../cart/cartStorage";
 import styled from "styled-components";
 import { X } from "lucide-react";
 import ProductBrand from "./ProductBrand";
+import ProductInformation from "./ProductInformation";
 import * as S from "./ProductDetailPage.styled";
 const Details = styled(S.Panel)`
  align-self:center;width:100%;max-width:440px;justify-self:center;box-sizing:border-box;padding:32px 20px;
@@ -41,7 +42,7 @@ export default function RemoteProduct({id}:{id:string}) {
  if(!product)return <S.Page><p role="status">{error||"상품을 불러오는 중입니다."}</p><Link to="/">상품 목록</Link></S.Page>;
  return <S.Page><S.Container><S.Main><S.Viewer><img src={product.images?.[0]} alt={product.name}/></S.Viewer><Details><ProductBrand key={product.brand?.name} brand={product.brand??{name:"pueblo"}}/><S.Title>{product.name}</S.Title><S.PriceRow>{(sku?.price??product.salePrice).toLocaleString("ko-KR")}원</S.PriceRow>
  <S.CTA><S.CartButton disabled={product.saleStatus!=="ON_SALE"||product.currency!=="KRW"} onClick={()=>{setMessage("");dialog.current?.showModal();}}>구매하기</S.CartButton></S.CTA>
- <Link to="/cart">장바구니 보기</Link>
+ <ProductInformation product={product}/>
  <PurchaseDialog ref={dialog} aria-labelledby="purchase-title" onClick={e=>{if(e.target===dialog.current&&!busy)dialog.current.close();}} onCancel={e=>{if(busy)e.preventDefault();}}>
  <div className="head"><button className="close" aria-label="닫기" disabled={busy} onClick={()=>dialog.current?.close()}><X size={24}/></button><div className="product"><img src={product.images?.[0]} alt=""/><div><h2 id="purchase-title">{product.name}</h2><p>{product.brand?.name}</p></div></div></div>
  <div className="options">{product.skus.map(s=><button className="option" key={s.id} aria-pressed={skuId===s.id} disabled={busy||skuLimit(s)<1} onClick={()=>{setSkuId(s.id);setMessage("");}}>{Object.values(s.options).join(" / ")}<span>{skuLimit(s)<1?"품절":`${s.price.toLocaleString("ko-KR")}원`}</span></button>)}</div>
