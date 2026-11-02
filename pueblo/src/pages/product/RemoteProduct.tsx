@@ -18,7 +18,7 @@ const PurchaseDialog = styled.dialog`
  .product{display:flex;gap:18px;align-items:center;} img{width:64px;height:76px;object-fit:contain;} h2{font-size:15px;margin:0 0 8px;} p{font-size:13px;color:#888;}
  .options{padding:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;min-height:180px;align-content:start;}
  .option{padding:14px 8px;border:1px solid #ddd;border-radius:10px;background:white;cursor:pointer;font:inherit;font-size:13px;} .option[aria-pressed=true]{border:2px solid #222;font-weight:600;} .option span{display:block;color:#ef6253;margin-top:6px;} button:disabled{opacity:.4;cursor:default;}
- .actions{padding:20px;background:white;position:sticky;bottom:0;border-top:1px solid #eee;} .buttons{display:flex;gap:8px;} .buttons button{flex:1;padding:18px 8px;border:0;border-radius:10px;background:#222;color:white;font:inherit;font-weight:600;cursor:pointer;} .buttons button:last-child{background:#ef6253;}
+ .actions{padding:20px;background:white;position:sticky;bottom:0;border-top:1px solid #eee;} .buttons{display:flex;gap:8px;} .buttons button{flex:1;height:42px;padding:0 8px;border:0;border-radius:10px;background:#222;color:white;font:inherit;font-weight:600;cursor:pointer;} .buttons button:last-child{background:#ef6253;}
  @media(max-width:600px){margin:auto auto 0;width:100%;max-width:100%;border-radius:18px 18px 0 0;}
 `;
 export default function RemoteProduct({id}:{id:string}) {
