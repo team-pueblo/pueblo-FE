@@ -33,6 +33,7 @@ export const Main = styled.div`
 
 export const Viewer = styled.div`
   min-width: 0;
+  align-self: center;
   background: #fff;
   img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: contain; }
   @media (max-width: 768px) {

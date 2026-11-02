@@ -12,8 +12,11 @@ import {
   HighlightItem,
 } from "./Header.styled";
 import { Link } from "react-router-dom";
+import { useCurrentMember } from "../../utils/useCurrentMember";
+import { logout } from "../../utils/auth";
 
 const Header = () => {
+  const member = useCurrentMember();
   return (
     <HeaderContainer>
       <HeaderTop>
@@ -43,12 +46,13 @@ const Header = () => {
             </Link>
           </NavItem>
           <NavItem>
+            {member ? <button type="button" title={`${member.nickname}님 로그아웃`} style={{border:0,padding:0,background:"none",font:"inherit",color:"inherit",cursor:"pointer"}} onClick={() => { logout(); window.dispatchEvent(new Event("pueblo-session-change")); }}>로그아웃</button> :
             <Link
               to="/login"
               style={{ textDecoration: "none", color: "inherit" }}
             >
               로그인
-            </Link>
+            </Link>}
           </NavItem>
         </RightNav>
       </HeaderTop>

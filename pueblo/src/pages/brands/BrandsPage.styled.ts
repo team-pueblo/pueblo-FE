@@ -92,3 +92,9 @@ export const Empty = styled.div`
   a, button { display: inline-flex; box-sizing: border-box; align-items: center; min-height: 34px; padding: 0 16px; margin-top: 24px; background: #fff; border: 1px solid #ddd; color: inherit; font: inherit; text-decoration: none; cursor: pointer; }
   @media (max-width: 768px) { a, button { min-height: 44px; } }
 `;
+
+export const Pagination = styled.nav`
+ display:flex;align-items:center;justify-content:center;gap:20px;margin-top:32px;
+ button{min-height:36px;padding:8px 16px;background:#fff;border:1px solid #ddd;font:inherit;color:inherit;cursor:pointer;}
+ button:disabled{opacity:.4;cursor:default;} span{font-size:13px;}
+`;
