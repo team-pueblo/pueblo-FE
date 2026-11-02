@@ -11,6 +11,7 @@ import MainPage from "./pages/Main/MainPage";
 import CategoryPage from "./pages/Main/CategoryPage";
 import BrandsPage from "./pages/brands/BrandsPage";
 import BrandProductsPage from "./pages/brands/BrandProductsPage";
+import CatalogCategoryPage from "./pages/Main/CatalogCategoryPage";
 import EmptyPage from "./pages/Main/EmptyPage";
 import LoginPage from "./pages/login/LoginPage";
 import FindIdPage from "./pages/login/FindIdPage";
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById("root")!, sentryRootOptions).render(
             <Route path="checkout/fail" element={<CheckoutResultPage />} />
             <Route path="favorites" element={<FavoritesPage />} />
             <Route path="search" element={<SearchPage />} />
+            <Route path="categories/:slug" element={<CatalogCategoryPage />} />
             <Route path="men" element={<CategoryPage title="남성" />} />
             <Route path="women" element={<CategoryPage title="여성" />} />
             <Route path="lifestyle" element={<CategoryPage title="생활" />} />

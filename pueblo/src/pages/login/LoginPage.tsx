@@ -6,6 +6,7 @@ import { api } from "../../api/client";
 import { useNavigate } from "react-router-dom";
 
 // 2) 절대경로 import
+import LoginSuccessModal from "./LoginSuccessModal";
 import KakaoLogin from "../../components/KakaoLogin";
 
 
@@ -71,6 +72,7 @@ const useRememberedEmail = () => {
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
 
   const { email, setEmail, remember, setRemember, persist } = useRememberedEmail();
   const [password, setPassword] = useState<string>("");
@@ -172,8 +174,7 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("token", session.accessToken);
       localStorage.setItem("tokenExpiresAt", String(Date.now() + session.expiresIn * 1000));
       localStorage.setItem("user", JSON.stringify({ ...session.user, isSocialLogin: false }));
-      alert("로그인 성공!");
-      navigate("/");
+      setSuccess(true);
     } catch (err) {
       captureHandledError(err, { feature: "auth", action: "login" });
       if (axios.isAxiosError(err) && [400, 401].includes(err.response?.status ?? 0)) {
@@ -275,6 +276,7 @@ const LoginPage: React.FC = () => {
           신규회원 가입하고 <span className="emph">10% 할인 쿠폰</span> 받아보세요.
         </NoticeStyled>
       </CardStyled>
+      {success && <LoginSuccessModal onConfirm={() => navigate("/", { replace: true })} />}
     </PageStyled>
   );
 };
