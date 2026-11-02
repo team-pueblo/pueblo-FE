@@ -174,6 +174,7 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("token", session.accessToken);
       localStorage.setItem("tokenExpiresAt", String(Date.now() + session.expiresIn * 1000));
       localStorage.setItem("user", JSON.stringify({ ...session.user, isSocialLogin: false }));
+      window.dispatchEvent(new Event("pueblo-session-change"));
       setSuccess(true);
     } catch (err) {
       captureHandledError(err, { feature: "auth", action: "login" });
